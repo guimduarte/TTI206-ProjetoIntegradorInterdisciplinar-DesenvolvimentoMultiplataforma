@@ -6,6 +6,8 @@ Autores:
 
 @Alexandre Raminelli Junior - 24.01625-0
 
+@Eike Marchiori Ulinski - 24.00682-3
+
 @Guilherme Monti Duarte - 24.00888-5
 
 @Henrique Yuri Cawamura Seppelfelt - 24.00545-2
