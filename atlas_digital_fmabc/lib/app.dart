@@ -14,6 +14,7 @@ class App extends StatelessWidget {
       title: 'Atlas Digital FMABC', // título do app
       theme: materialTheme.light(), // tema claro
       darkTheme: materialTheme.dark(), // tema escuro
+      debugShowCheckedModeBanner: false, // remover banner de "debug"
       home: const MyHomePage(title: 'Atlas Digital FMABC'), // página inicial
     );
   }
