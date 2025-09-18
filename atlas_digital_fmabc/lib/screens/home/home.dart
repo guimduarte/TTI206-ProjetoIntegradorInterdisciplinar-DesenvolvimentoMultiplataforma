@@ -1,4 +1,6 @@
+import 'package:atlas_digital_fmabc/widgets/layout/mobile/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key}); // Construtor padrão
@@ -7,14 +9,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // layout
-      appBar: homeAppBar(context),
+      appBar: _homeAppBar(context),
+      bottomNavigationBar: AppNavigationBar(selectedIndex: 0),
       // conteúdo
       body: Column(children: [Text("Página inicial")]),
     );
   }
 
   /// AppBar da página inicial.
-  AppBar homeAppBar(BuildContext context) {
+  AppBar _homeAppBar(BuildContext context) {
     final theme = Theme.of(context);
     return AppBar(
       // aparência
