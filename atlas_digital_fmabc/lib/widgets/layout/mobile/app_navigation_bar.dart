@@ -13,7 +13,7 @@ class AppNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       destinations: navigationItems,
-      selectedIndex: selectedIndex, // item selecionado
+      selectedIndex: 1, // item selecionado
     );
   }
 }
