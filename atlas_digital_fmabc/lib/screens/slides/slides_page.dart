@@ -1,4 +1,3 @@
-import 'package:atlas_digital_fmabc/widgets/navigation/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 /// Página de lâminas.
@@ -10,7 +9,6 @@ class SlidesPage extends StatelessWidget {
     return Scaffold(
       // layout
       appBar: _slidesAppBar(context),
-      bottomNavigationBar: AppNavigationBar(currentIndex: 1),
       // conteúdo
       body: Column(children: [Text("Tópicos e lâminas")]),
     );

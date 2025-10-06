@@ -1,4 +1,3 @@
-import 'package:atlas_digital_fmabc/widgets/navigation/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 /// Menu de opções para mobile.
@@ -10,7 +9,6 @@ class MenuPage extends StatelessWidget {
     return Scaffold(
       // layout
       appBar: _menuAppBar(context),
-      bottomNavigationBar: AppNavigationBar(currentIndex: 3),
       // conteúdo
       body: Column(children: [Text("Menu da aplicação")]),
     );

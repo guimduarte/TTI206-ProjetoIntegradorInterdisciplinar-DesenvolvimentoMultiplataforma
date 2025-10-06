@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/config/routes/router.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
 import "core/themes/theme.dart";
@@ -11,12 +12,15 @@ class App extends StatelessWidget {
     /// Tema do app.
     final materialTheme = MaterialTheme(ThemeData.light().textTheme);
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Atlas Digital FMABC', // título do app
+
       theme: materialTheme.light(), // tema claro
       darkTheme: materialTheme.dark(), // tema escuro
+
       debugShowCheckedModeBanner: false, // remover banner de "debug"
-      home: const HomePage(), // página inicial
+
+      routerConfig: router, // configuração do roteador
     );
   }
 }

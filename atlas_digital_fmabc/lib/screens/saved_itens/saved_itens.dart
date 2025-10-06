@@ -1,4 +1,3 @@
-import 'package:atlas_digital_fmabc/widgets/navigation/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 /// Página de itens salvos.
@@ -10,7 +9,6 @@ class SavedItens extends StatelessWidget {
     return Scaffold(
       // layout
       appBar: _savedAppBar(context),
-      bottomNavigationBar: AppNavigationBar(currentIndex: 2),
       // conteúdo
       body: Column(children: [Text("Tópicos, lâminas e anotações salvas")]),
     );
