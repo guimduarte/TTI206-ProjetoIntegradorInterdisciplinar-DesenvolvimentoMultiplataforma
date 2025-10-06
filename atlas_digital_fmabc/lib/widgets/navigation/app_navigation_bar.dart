@@ -1,3 +1,7 @@
+import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
+import 'package:atlas_digital_fmabc/screens/menu/menu_page.dart';
+import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
+import 'package:atlas_digital_fmabc/screens/slides/slides_page.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +15,9 @@ class AppNavigationBar extends StatefulWidget {
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
+  /// Lista de páginas principais
+  final mainPages = [HomePage(), SlidesPage(), SavedItens(), MenuPage()];
+
   /// Lista de destinos da NavigationBar.
   final List<NavigationDestination> _destinations = [
     // Início
@@ -44,6 +51,13 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     return NavigationBar(
       destinations: _destinations,
       selectedIndex: widget.currentIndex,
+      onDestinationSelected: (int index) {
+        // Navegar para a página selecionada
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => mainPages[index]),
+        );
+      },
     );
   }
 }
