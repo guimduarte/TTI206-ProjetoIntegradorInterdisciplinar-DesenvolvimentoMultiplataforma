@@ -1,4 +1,4 @@
-import 'package:atlas_digital_fmabc/screens/home/home.dart';
+import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
 import "core/themes/theme.dart";
 

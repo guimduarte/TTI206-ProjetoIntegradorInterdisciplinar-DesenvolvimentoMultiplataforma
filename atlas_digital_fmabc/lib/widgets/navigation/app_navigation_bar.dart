@@ -2,7 +2,9 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class AppNavigationBar extends StatefulWidget {
-  const AppNavigationBar({super.key});
+  const AppNavigationBar({super.key, required this.currentIndex});
+
+  final int currentIndex;
 
   @override
   State<AppNavigationBar> createState() => _AppNavigationBarState();
@@ -39,6 +41,9 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar(destinations: _destinations);
+    return NavigationBar(
+      destinations: _destinations,
+      selectedIndex: widget.currentIndex,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:atlas_digital_fmabc/widgets/navigation/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
+/// Página inicial.
 class HomePage extends StatelessWidget {
   const HomePage({super.key}); // Construtor padrão
 
@@ -9,7 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       // layout
       appBar: _homeAppBar(context),
-      bottomNavigationBar: AppNavigationBar(),
+      bottomNavigationBar: AppNavigationBar(currentIndex: 0),
       // conteúdo
       body: Column(children: [Text("Página inicial")]),
     );
