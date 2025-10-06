@@ -1,4 +1,4 @@
-import 'package:atlas_digital_fmabc/widgets/layout/mobile/app_navigation_bar.dart';
+import 'package:atlas_digital_fmabc/widgets/navigation/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       // layout
       appBar: _homeAppBar(context),
-      bottomNavigationBar: AppNavigationBar(selectedIndex: 0),
+      bottomNavigationBar: AppNavigationBar(),
       // conteúdo
       body: Column(children: [Text("Página inicial")]),
     );
