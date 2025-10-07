@@ -57,3 +57,12 @@ final menuDestinations = [
     selectedIcon: FluentIcons.info_24_filled,
   ),
 ];
+
+/// Destinos para a área do administrador.
+final adminDestinations = [
+  const Destination(
+    label: "Entrar como Professor",
+    icon: FluentIcons.arrow_enter_20_regular,
+    selectedIcon: FluentIcons.arrow_enter_20_filled,
+  ),
+];
