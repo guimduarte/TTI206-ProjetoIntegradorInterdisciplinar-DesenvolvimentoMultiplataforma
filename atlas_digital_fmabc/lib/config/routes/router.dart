@@ -1,6 +1,5 @@
 import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
-import 'package:atlas_digital_fmabc/screens/menu/menu_page.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
 import 'package:atlas_digital_fmabc/screens/slides/slides_page.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/main_layout.dart';
@@ -54,7 +53,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: Routes.menuPage,
-              builder: (context, state) => const MenuPage(),
+              builder: (context, state) => const SizedBox.shrink(),
             ),
           ],
         ),
