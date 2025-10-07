@@ -34,6 +34,7 @@ class _MainLayoutState extends State<MainLayout> {
 
         /// Widget de navegação lateral para desktop.
         final rail = NavigationRail(
+          labelType: NavigationRailLabelType.all, // exibir rótulos
           selectedIndex: selectedIndex,
           // Lista de destinos
           destinations: destinations
