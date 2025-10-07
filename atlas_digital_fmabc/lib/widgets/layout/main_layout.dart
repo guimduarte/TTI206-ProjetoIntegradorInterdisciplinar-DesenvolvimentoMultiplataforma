@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/models/navigation/destination.dart';
 import 'package:atlas_digital_fmabc/screens/menu/menu_drawer.dart';
 import 'package:flutter/material.dart';
@@ -24,39 +25,86 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    // Layout para mobile
-    return Scaffold(
-      key: _scaffoldKey, // Chave para controlar o Scaffold
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth >= KBreakpoints.md;
 
-      body: widget
-          .navigationShell, // Corpo principal gerenciado pelo NavigationShell
+        /// Índice selecionado no Navigation.
+        final selectedIndex = widget.navigationShell.currentIndex;
 
-      endDrawer: MenuDrawer(), // menu lateral aberto na direita
-
-      bottomNavigationBar: NavigationBar(
-        selectedIndex:
-            widget.navigationShell.currentIndex, // Índice da aba atual
-        onDestinationSelected: (int index) {
-          // Abrir drawer se for a aba de menu
-          if (index == MainLayout.menuIndex) {
-            _scaffoldKey.currentState?.openEndDrawer();
-          } else {
-            // navegar para a branch
-            widget.navigationShell.goBranch(index); // Função para mudar de aba
-          }
-        },
-        // Lista de destinos
-        destinations: destinations
-            .map(
-              // Montar widget de destino
-              (destination) => NavigationDestination(
-                label: destination.label,
-                icon: Icon(destination.icon),
-                selectedIcon: Icon(destination.selectedIcon),
-              ),
-            )
-            .toList(),
-      ),
+        /// Widget de navegação lateral para desktop.
+        final rail = NavigationRail(
+          selectedIndex: selectedIndex,
+          // Lista de destinos
+          destinations: destinations
+              .map(
+                (d) => NavigationRailDestination(
+                  icon: Icon(d.icon),
+                  selectedIcon: Icon(d.selectedIcon),
+                  label: Text(d.label),
+                ),
+              )
+              .toList(),
+          // Função executada ao selecionar um destino
+          onDestinationSelected: (int index) {
+            if (index == MainLayout.menuIndex) {
+              // Se selecionar menu, abrir o drawer
+              _scaffoldKey.currentState?.openEndDrawer();
+              widget.navigationShell.goBranch(
+                MainLayout.menuIndex,
+              ); // Manter a aba selecionada
+            } else {
+              // Navegar para a branch selecionada
+              widget.navigationShell.goBranch(index);
+            }
+          },
+        );
+        return Scaffold(
+          key: _scaffoldKey, // Chave para controlar o Scaffold
+          endDrawer: MenuDrawer(), // menu lateral aberto na direita
+          // Corpo principal responsivo
+          body: isDesktop
+              ? Row(
+                  children: [
+                    // Navegação lateral
+                    SafeArea(child: rail),
+                    // Conteúdo da rota
+                    Expanded(child: widget.navigationShell),
+                  ],
+                ) // desktop
+              : widget.navigationShell, // mobile (apenas conteúdo)
+          // Barra de navegação para mobile
+          bottomNavigationBar: isDesktop
+              ? null
+              : NavigationBar(
+                  selectedIndex: widget
+                      .navigationShell
+                      .currentIndex, // Índice da aba atual
+                  onDestinationSelected: (int index) {
+                    // Abrir drawer se for a aba de menu
+                    if (index == MainLayout.menuIndex) {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    } else {
+                      // navegar para a branch
+                      widget.navigationShell.goBranch(
+                        index,
+                      ); // Função para mudar de aba
+                    }
+                  },
+                  // Lista de destinos
+                  destinations: destinations
+                      .map(
+                        // Montar widget de destino
+                        (destination) => NavigationDestination(
+                          label: destination.label,
+                          icon: Icon(destination.icon),
+                          selectedIcon: Icon(destination.selectedIcon),
+                        ),
+                      )
+                      .toList(),
+                ),
+        );
+      },
     );
   }
 }
