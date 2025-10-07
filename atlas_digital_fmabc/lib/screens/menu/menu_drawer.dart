@@ -51,6 +51,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
           ...destinationsBuilder(menuDestinations),
           _menuDivider,
 
+          // Seção Contato
+          _sectionHeader("Contato", theme),
+          ...destinationsBuilder(contactDestinations),
+          _menuDivider,
+
           // Seção do Administrador
           _sectionHeader("Área do Administrador", theme),
           ...destinationsBuilder(adminDestinations),

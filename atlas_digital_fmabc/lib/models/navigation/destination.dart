@@ -59,10 +59,29 @@ final menuDestinations = [
 ];
 
 /// Destinos para a área do administrador.
-final adminDestinations = [
-  const Destination(
+const adminDestinations = [
+  Destination(
     label: "Entrar como Professor",
     icon: FluentIcons.arrow_enter_20_regular,
     selectedIcon: FluentIcons.arrow_enter_20_filled,
+  ),
+];
+
+/// Destinos de contato.
+const contactDestinations = [
+  Destination(
+    label: "Site da FMABC",
+    icon: FluentIcons.globe_24_regular,
+    selectedIcon: FluentIcons.globe_24_filled,
+  ),
+  Destination(
+    label: "E-mail",
+    icon: FluentIcons.mail_24_regular,
+    selectedIcon: FluentIcons.mail_24_filled,
+  ),
+  Destination(
+    label: "Telefone",
+    icon: FluentIcons.call_24_regular,
+    selectedIcon: FluentIcons.call_24_filled,
   ),
 ];
