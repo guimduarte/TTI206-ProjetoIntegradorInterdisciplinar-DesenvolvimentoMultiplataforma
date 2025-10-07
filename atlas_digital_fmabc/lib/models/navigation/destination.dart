@@ -42,3 +42,18 @@ const destinations = [
     selectedIcon: FluentIcons.navigation_24_filled,
   ),
 ];
+
+/// Destinos para o menu lateral.
+final menuDestinations = [
+  ...destinations.sublist(0, 3),
+  const Destination(
+    label: "Pesquisar",
+    icon: FluentIcons.search_24_regular,
+    selectedIcon: FluentIcons.search_24_regular,
+  ),
+  const Destination(
+    label: "Sobre nós",
+    icon: FluentIcons.info_24_regular,
+    selectedIcon: FluentIcons.info_24_filled,
+  ),
+];
