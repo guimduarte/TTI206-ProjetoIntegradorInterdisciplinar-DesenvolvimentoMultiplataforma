@@ -1,6 +1,7 @@
 import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/models/navigation/destination.dart';
 import 'package:atlas_digital_fmabc/screens/menu/menu_drawer.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,8 +52,20 @@ class _MainLayoutState extends State<MainLayout> {
           selectedIconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
 
           selectedIndex: selectedIndex,
+
+          // Botão de menu
+          leading: IconButton(
+            icon: Icon(FluentIcons.navigation_24_filled),
+            color: railForeground,
+            tooltip: "Menu",
+            onPressed: () {
+              // Abrir menu/drawer
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
+          ),
           // Lista de destinos
-          destinations: destinations
+          destinations: mobileDestinations
+              .where((d) => d.label != "Menu") // não exibir menu nos destinos
               .map(
                 (d) => NavigationRailDestination(
                   icon: Icon(d.icon),
@@ -63,13 +76,8 @@ class _MainLayoutState extends State<MainLayout> {
               .toList(),
           // Função executada ao selecionar um destino
           onDestinationSelected: (int index) {
-            if (index == MainLayout.menuIndex) {
-              // Se selecionar menu, abrir o drawer
-              _scaffoldKey.currentState?.openEndDrawer();
-            } else {
-              // Navegar para a branch selecionada
-              widget.navigationShell.goBranch(index);
-            }
+            // Navegar para a branch selecionada
+            widget.navigationShell.goBranch(index);
           },
         );
 
@@ -106,7 +114,7 @@ class _MainLayoutState extends State<MainLayout> {
                     }
                   },
                   // Lista de destinos
-                  destinations: destinations
+                  destinations: mobileDestinations
                       .map(
                         // Montar widget de destino
                         (destination) => NavigationDestination(
