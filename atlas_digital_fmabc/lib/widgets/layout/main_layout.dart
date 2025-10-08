@@ -66,7 +66,9 @@ class _MainLayoutState extends State<MainLayout> {
 
           // Botão de menu
           leading: menuButton,
+
           // Lista de destinos
+          groupAlignment: -0.75, // espaçamento
           destinations: mobileDestinations
               .where((d) => d.label != "Menu") // não exibir menu nos destinos
               .map(
