@@ -26,6 +26,9 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // cores
+    final railBackground = theme.colorScheme.onSecondaryFixed;
+    final railForeground = theme.colorScheme.secondaryFixed;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -38,15 +41,11 @@ class _MainLayoutState extends State<MainLayout> {
         final rail = NavigationRail(
           // style:
           labelType: NavigationRailLabelType.all, // exibir rótulos
-          backgroundColor: theme.colorScheme.onSecondaryFixed,
+          backgroundColor: railBackground,
           indicatorColor: theme.colorScheme.primary,
           // estilo de destinos não selecionados
-          unselectedLabelTextStyle: TextStyle(
-            color: theme.colorScheme.secondaryFixed,
-          ),
-          unselectedIconTheme: IconThemeData(
-            color: theme.colorScheme.secondaryFixed,
-          ),
+          unselectedLabelTextStyle: TextStyle(color: railForeground),
+          unselectedIconTheme: IconThemeData(color: railForeground),
           // estilo de destinos selecionados
           selectedLabelTextStyle: TextStyle(color: Colors.white),
           selectedIconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
