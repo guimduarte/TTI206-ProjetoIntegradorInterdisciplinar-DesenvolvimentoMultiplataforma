@@ -65,10 +65,12 @@ class _MainLayoutState extends State<MainLayout> {
           selectedIndex: selectedIndex,
 
           // Botão de menu
-          leading: menuButton,
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: menuButton,
+          ),
 
           // Lista de destinos
-          groupAlignment: -0.75, // espaçamento
           destinations: railDestinations
               .where((d) => d.label != "Menu") // não exibir menu nos destinos
               .map(
