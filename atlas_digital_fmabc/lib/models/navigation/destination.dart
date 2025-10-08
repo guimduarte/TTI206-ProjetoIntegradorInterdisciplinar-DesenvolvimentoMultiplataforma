@@ -44,7 +44,7 @@ const mobileDestinations = [
 ];
 
 /// Destinos para o menu lateral.
-final menuDestinations = [
+final railDestinations = [
   ...mobileDestinations.sublist(0, 3),
   const Destination(
     label: "Pesquisar",

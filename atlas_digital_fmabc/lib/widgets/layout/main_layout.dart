@@ -69,7 +69,7 @@ class _MainLayoutState extends State<MainLayout> {
 
           // Lista de destinos
           groupAlignment: -0.75, // espaçamento
-          destinations: mobileDestinations
+          destinations: railDestinations
               .where((d) => d.label != "Menu") // não exibir menu nos destinos
               .map(
                 (d) => NavigationRailDestination(

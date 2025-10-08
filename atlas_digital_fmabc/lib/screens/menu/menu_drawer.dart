@@ -48,7 +48,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
           // Seção Principal
           _sectionHeader("Menu", theme),
-          ...destinationsBuilder(menuDestinations),
+          ...destinationsBuilder(railDestinations),
           _menuDivider,
 
           // Seção Contato
