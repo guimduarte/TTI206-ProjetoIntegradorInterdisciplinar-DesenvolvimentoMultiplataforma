@@ -38,6 +38,17 @@ class _MainLayoutState extends State<MainLayout> {
         /// Índice selecionado no Navigation.
         final selectedIndex = widget.navigationShell.currentIndex;
 
+        /// Botão de menu para abrir
+        final menuButton = IconButton(
+          icon: Icon(FluentIcons.navigation_24_filled),
+          color: railForeground,
+          tooltip: "Menu",
+          onPressed: () {
+            // Abrir menu/drawer
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        );
+
         /// Widget de navegação lateral para desktop.
         final rail = NavigationRail(
           // style:
@@ -54,15 +65,7 @@ class _MainLayoutState extends State<MainLayout> {
           selectedIndex: selectedIndex,
 
           // Botão de menu
-          leading: IconButton(
-            icon: Icon(FluentIcons.navigation_24_filled),
-            color: railForeground,
-            tooltip: "Menu",
-            onPressed: () {
-              // Abrir menu/drawer
-              _scaffoldKey.currentState?.openEndDrawer();
-            },
-          ),
+          leading: menuButton,
           // Lista de destinos
           destinations: mobileDestinations
               .where((d) => d.label != "Menu") // não exibir menu nos destinos
@@ -83,6 +86,8 @@ class _MainLayoutState extends State<MainLayout> {
 
         return Scaffold(
           key: _scaffoldKey, // Chave para controlar o Scaffold
+          // menu lateral
+          drawer: MenuDrawer(),
           endDrawer: MenuDrawer(), // menu lateral aberto na direita
           // Corpo principal responsivo
           body: isDesktop
