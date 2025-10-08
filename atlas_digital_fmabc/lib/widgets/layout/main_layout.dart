@@ -40,15 +40,15 @@ class _MainLayoutState extends State<MainLayout> {
           labelType: NavigationRailLabelType.all, // exibir rótulos
           backgroundColor: theme.colorScheme.onSecondaryFixed,
           indicatorColor: theme.colorScheme.primary,
-          // estilo de rótulos não selecionados
+          // estilo de destinos não selecionados
           unselectedLabelTextStyle: TextStyle(
             color: theme.colorScheme.secondaryFixed,
           ),
           unselectedIconTheme: IconThemeData(
             color: theme.colorScheme.secondaryFixed,
           ),
-          // estilo de rótulos selecionados
-          selectedLabelTextStyle: TextStyle(color: theme.colorScheme.primary),
+          // estilo de destinos selecionados
+          selectedLabelTextStyle: TextStyle(color: Colors.white),
           selectedIconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
 
           selectedIndex: selectedIndex,
