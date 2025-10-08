@@ -86,6 +86,35 @@ class _MainLayoutState extends State<MainLayout> {
           },
         );
 
+        /// Barra de navegação para mobile.
+        var navigationBar = NavigationBar(
+          selectedIndex:
+              widget.navigationShell.currentIndex, // Índice da aba atual
+          onDestinationSelected: (int index) {
+            // Abrir drawer se for a aba de menu
+            if (index == MainLayout.menuIndex) {
+              _scaffoldKey.currentState?.openEndDrawer();
+            } else {
+              // navegar para a branch
+              widget.navigationShell.goBranch(
+                index,
+              ); // Função para mudar de aba
+            }
+          },
+          // Lista de destinos
+          destinations: mobileDestinations
+              .map(
+                // Montar widget de destino
+                (destination) => NavigationDestination(
+                  label: destination.label,
+                  icon: Icon(destination.icon),
+                  selectedIcon: Icon(destination.selectedIcon),
+                ),
+              )
+              .toList(),
+        );
+
+        // Layout
         return Scaffold(
           key: _scaffoldKey, // Chave para controlar o Scaffold
           // menu lateral
@@ -103,35 +132,7 @@ class _MainLayoutState extends State<MainLayout> {
                 ) // desktop
               : widget.navigationShell, // mobile (apenas conteúdo)
           // Barra de navegação para mobile
-          bottomNavigationBar: isDesktop
-              ? null
-              : NavigationBar(
-                  selectedIndex: widget
-                      .navigationShell
-                      .currentIndex, // Índice da aba atual
-                  onDestinationSelected: (int index) {
-                    // Abrir drawer se for a aba de menu
-                    if (index == MainLayout.menuIndex) {
-                      _scaffoldKey.currentState?.openEndDrawer();
-                    } else {
-                      // navegar para a branch
-                      widget.navigationShell.goBranch(
-                        index,
-                      ); // Função para mudar de aba
-                    }
-                  },
-                  // Lista de destinos
-                  destinations: mobileDestinations
-                      .map(
-                        // Montar widget de destino
-                        (destination) => NavigationDestination(
-                          label: destination.label,
-                          icon: Icon(destination.icon),
-                          selectedIcon: Icon(destination.selectedIcon),
-                        ),
-                      )
-                      .toList(),
-                ),
+          bottomNavigationBar: isDesktop ? null : navigationBar,
         );
       },
     );
