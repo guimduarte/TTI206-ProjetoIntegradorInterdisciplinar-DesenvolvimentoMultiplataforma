@@ -25,6 +25,8 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= KBreakpoints.md;
@@ -34,7 +36,21 @@ class _MainLayoutState extends State<MainLayout> {
 
         /// Widget de navegação lateral para desktop.
         final rail = NavigationRail(
+          // style:
           labelType: NavigationRailLabelType.all, // exibir rótulos
+          backgroundColor: theme.colorScheme.onSecondaryFixed,
+          indicatorColor: theme.colorScheme.primary,
+          // estilo de rótulos não selecionados
+          unselectedLabelTextStyle: TextStyle(
+            color: theme.colorScheme.secondaryFixed,
+          ),
+          unselectedIconTheme: IconThemeData(
+            color: theme.colorScheme.secondaryFixed,
+          ),
+          // estilo de rótulos selecionados
+          selectedLabelTextStyle: TextStyle(color: theme.colorScheme.primary),
+          selectedIconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
+
           selectedIndex: selectedIndex,
           // Lista de destinos
           destinations: destinations
@@ -51,15 +67,13 @@ class _MainLayoutState extends State<MainLayout> {
             if (index == MainLayout.menuIndex) {
               // Se selecionar menu, abrir o drawer
               _scaffoldKey.currentState?.openEndDrawer();
-              widget.navigationShell.goBranch(
-                MainLayout.menuIndex,
-              ); // Manter a aba selecionada
             } else {
               // Navegar para a branch selecionada
               widget.navigationShell.goBranch(index);
             }
           },
         );
+
         return Scaffold(
           key: _scaffoldKey, // Chave para controlar o Scaffold
           endDrawer: MenuDrawer(), // menu lateral aberto na direita
