@@ -1,5 +1,7 @@
+import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:go_router/go_router.dart';
 
 /// Modelo para representar um destino de navegação.
 class Destination {
@@ -7,6 +9,7 @@ class Destination {
     required this.label,
     required this.icon,
     required this.selectedIcon,
+    this.onSelected,
   });
 
   /// Rótulo do destino.
@@ -17,6 +20,9 @@ class Destination {
 
   /// Ícone do destino selecionado.
   final IconData selectedIcon;
+
+  /// Função executada ao selecionar o destino.
+  final void Function(BuildContext)? onSelected;
 }
 
 /// Lista dos destinos para as principais páginas do aplicativo.
@@ -59,11 +65,12 @@ final railDestinations = [
 ];
 
 /// Destinos para a área do administrador.
-const adminDestinations = [
+final adminDestinations = [
   Destination(
     label: "Entrar como Professor",
     icon: FluentIcons.arrow_enter_20_regular,
     selectedIcon: FluentIcons.arrow_enter_20_filled,
+    onSelected: (context) => context.push(Routes.nestedLoginPage),
   ),
 ];
 

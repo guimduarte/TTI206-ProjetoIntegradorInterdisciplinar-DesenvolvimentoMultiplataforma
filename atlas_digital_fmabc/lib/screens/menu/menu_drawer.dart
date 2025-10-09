@@ -41,8 +41,21 @@ class _MenuDrawerState extends State<MenuDrawer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    // Array com todos os destinos.
+    final destinationsList = [
+      ...railDestinations,
+      ...contactDestinations,
+      ...adminDestinations,
+    ];
+
     return SafeArea(
       child: NavigationDrawer(
+        // Navegar
+        onDestinationSelected: (int index) {
+          print(index);
+          destinationsList[index].onSelected?.call(context);
+        },
+
         children: [
           SizedBox(height: 12.0),
 
