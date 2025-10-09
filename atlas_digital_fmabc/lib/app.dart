@@ -1,4 +1,4 @@
-import 'package:atlas_digital_fmabc/screens/home/home.dart';
+import 'package:atlas_digital_fmabc/views/widget_tree.dart';
 import 'package:flutter/material.dart';
 import "core/themes/theme.dart";
 
@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       theme: materialTheme.light(), // tema claro
       darkTheme: materialTheme.dark(), // tema escuro
       debugShowCheckedModeBanner: false, // remover banner de "debug"
-      home: const HomePage(), // página inicial
+      home: const WidgetTree(), // página inicial
     );
   }
 }
