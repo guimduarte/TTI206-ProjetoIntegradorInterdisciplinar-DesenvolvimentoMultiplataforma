@@ -52,7 +52,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
       child: NavigationDrawer(
         // Navegar
         onDestinationSelected: (int index) {
-          print(index);
           destinationsList[index].onSelected?.call(context);
         },
 
