@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/widgets/form/login_form.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            SizedBox(height: 8.0),
+            SizedBox(height: 10.0),
             // Imagem
             ClipRRect(
               borderRadius: BorderRadiusGeometry.circular(12.0),
@@ -34,6 +35,9 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
+
+            // Form de login
+            LoginForm(),
           ],
         ),
       ),
