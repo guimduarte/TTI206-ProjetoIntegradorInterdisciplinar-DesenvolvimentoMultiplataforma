@@ -8,7 +8,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// AppBar da página de login.
-    final _appBar = AppBar(
+    final appBar = AppBar(
       centerTitle: true,
       title: const TitleAndSupportingText(
         title: "Entrar como Professor",
@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: _appBar,
+      appBar: appBar,
       body: Center(child: Text("Página de Login")),
     );
   }
