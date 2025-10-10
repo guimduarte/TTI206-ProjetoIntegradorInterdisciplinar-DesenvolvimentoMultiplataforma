@@ -31,16 +31,22 @@ const mobileDestinations = [
     label: "Início",
     icon: FluentIcons.home_24_regular,
     selectedIcon: FluentIcons.home_24_filled,
+
+    route: Routes.homePage,
   ),
   Destination(
     label: "Lâminas",
     icon: FluentIcons.microscope_24_regular,
     selectedIcon: FluentIcons.microscope_24_filled,
+
+    route: Routes.slidesPage,
   ),
   Destination(
     label: "Salvos",
     icon: FluentIcons.bookmark_24_regular,
     selectedIcon: FluentIcons.bookmark_24_filled,
+
+    route: Routes.savedItens,
   ),
   Destination(
     label: "Menu",
