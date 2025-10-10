@@ -6,6 +6,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Página de Login"));
+    return Scaffold(
+      appBar: AppBar(title: Text("Página de Login")),
+      body: Center(child: Text("Página de Login")),
+    );
   }
 }

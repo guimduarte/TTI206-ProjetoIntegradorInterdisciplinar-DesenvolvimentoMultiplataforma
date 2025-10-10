@@ -70,7 +70,7 @@ final adminDestinations = [
     label: "Entrar como Professor",
     icon: FluentIcons.arrow_enter_20_regular,
     selectedIcon: FluentIcons.arrow_enter_20_filled,
-    onSelected: (context) => context.push(Routes.nestedLoginPage),
+    onSelected: (context) => context.go(Routes.nestedLoginPage),
   ),
 ];
 
