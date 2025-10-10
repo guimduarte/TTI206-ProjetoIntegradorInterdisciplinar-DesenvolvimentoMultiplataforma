@@ -17,7 +17,16 @@ class LoginPage extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
+    /// Conteúdo principal da página de login.
+    final mainContent = Column(
+      children: [
+        // Form de login
+        LoginForm(),
+      ],
+    );
+
+    /// Página de login para mobile.
+    final mobilePage = Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -36,11 +45,12 @@ class LoginPage extends StatelessWidget {
               ),
             ),
 
-            // Form de login
-            LoginForm(),
+            mainContent,
           ],
         ),
       ),
     );
+
+    return mobilePage;
   }
 }
