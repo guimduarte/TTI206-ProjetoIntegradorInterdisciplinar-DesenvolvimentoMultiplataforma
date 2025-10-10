@@ -63,6 +63,21 @@ class _LoginFormState extends State<LoginForm> {
       }),
     );
 
+    /// Botão de realizar login.
+    final submitButton = Row(
+      children: [
+        Expanded(
+          child: FilledButton.icon(
+            onPressed: () {
+              // TODO: realizar autenticação
+            },
+            label: Text("Entrar"),
+            icon: Icon(FluentIcons.arrow_enter_20_filled),
+          ),
+        ),
+      ],
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0),
       child: Column(
@@ -77,6 +92,9 @@ class _LoginFormState extends State<LoginForm> {
 
           // Continuar logado
           rememberMeSwitch,
+
+          // Botão de submissão
+          submitButton,
         ],
       ),
     );
