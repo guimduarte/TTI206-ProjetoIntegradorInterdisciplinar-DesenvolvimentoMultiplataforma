@@ -51,11 +51,20 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
     return SafeArea(
       child: NavigationDrawer(
-        // Navegar
+        // Função chamada ao selecionar um destino
         onDestinationSelected: (int index) {
-          // Navegar para a rota de destino se existir.
+          /// Se uma ação foi realizada.
+          bool actionPerformed = false;
+
+          // Navegar para a rota de destino se existir
           final route = destinationsList[index].route;
-          if (route != null) context.go(route);
+          if (route != null) {
+            context.go(route);
+            actionPerformed = true;
+          }
+
+          // Fechar o menu se alguma ação tiver sido realizada
+          if (actionPerformed) Navigator.of(context).pop();
         },
 
         children: [
