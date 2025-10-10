@@ -51,6 +51,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
     return SafeArea(
       child: NavigationDrawer(
+        selectedIndex: -2, // sem índice selecionado
+
         // Função chamada ao selecionar um destino
         onDestinationSelected: (int index) {
           /// Se uma ação foi realizada.
