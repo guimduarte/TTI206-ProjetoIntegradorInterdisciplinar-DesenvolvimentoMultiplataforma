@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:flutter/material.dart';
 
 /// Página de login para professores.
@@ -6,8 +7,17 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// AppBar da página de login.
+    final _appBar = AppBar(
+      centerTitle: true,
+      title: const TitleAndSupportingText(
+        title: "Entrar como Professor",
+        supportingText: "FMABC | Atlas Digital de Biologia Tecidual",
+      ),
+    );
+
     return Scaffold(
-      appBar: AppBar(title: Text("Página de Login")),
+      appBar: _appBar,
       body: Center(child: Text("Página de Login")),
     );
   }
