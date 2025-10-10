@@ -54,7 +54,13 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: Routes.menuPage,
-              builder: (context, state) => const SizedBox.shrink(),
+              // redirecionar pro início
+              redirect: (context, state) {
+                if (state.fullPath == Routes.menuPage) {
+                  return Routes.homePage;
+                }
+                return null;
+              },
               routes: [
                 GoRoute(
                   path: Routes.loginPage,
