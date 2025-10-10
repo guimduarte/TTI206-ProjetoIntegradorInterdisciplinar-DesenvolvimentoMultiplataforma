@@ -9,7 +9,7 @@ class Destination {
     required this.label,
     required this.icon,
     required this.selectedIcon,
-    this.onSelected,
+    this.route,
   });
 
   /// Rótulo do destino.
@@ -21,8 +21,8 @@ class Destination {
   /// Ícone do destino selecionado.
   final IconData selectedIcon;
 
-  /// Função executada ao selecionar o destino.
-  final void Function(BuildContext)? onSelected;
+  /// Rota do destino.
+  final String? route;
 }
 
 /// Lista dos destinos para as principais páginas do aplicativo.
@@ -70,7 +70,8 @@ final adminDestinations = [
     label: "Entrar como Professor",
     icon: FluentIcons.arrow_enter_20_regular,
     selectedIcon: FluentIcons.arrow_enter_20_filled,
-    onSelected: (context) => context.go(Routes.nestedLoginPage),
+
+    route: Routes.nestedLoginPage,
   ),
 ];
 

@@ -1,5 +1,6 @@
 import 'package:atlas_digital_fmabc/models/navigation/destination.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuDrawer extends StatefulWidget {
   const MenuDrawer({super.key});
@@ -52,7 +53,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
       child: NavigationDrawer(
         // Navegar
         onDestinationSelected: (int index) {
-          destinationsList[index].onSelected?.call(context);
+          // Navegar para a rota de destino se existir.
+          final route = destinationsList[index].route;
+          if (route != null) context.go(route);
         },
 
         children: [
