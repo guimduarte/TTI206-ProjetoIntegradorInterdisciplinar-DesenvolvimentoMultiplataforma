@@ -2,8 +2,16 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 /// Formulário de login.
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  /// Valor do campo lembre-se de mim.
+  bool rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +51,18 @@ class LoginForm extends StatelessWidget {
       ),
     );
 
+    /// Switch de continuar logado.
+    final rememberMeSwitch = SwitchListTile(
+      title: Text("Manter-me conectado"),
+      subtitle: Text(
+        "Salva sua sessão para entrar automaticamente na próxima vez",
+      ),
+      value: rememberMe,
+      onChanged: (value) => setState(() {
+        rememberMe = value;
+      }),
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0),
       child: Column(
@@ -54,6 +74,9 @@ class LoginForm extends StatelessWidget {
           // Campos
           emailField,
           passwordField,
+
+          // Continuar logado
+          rememberMeSwitch,
         ],
       ),
     );
