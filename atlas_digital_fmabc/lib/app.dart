@@ -1,6 +1,6 @@
 import 'package:atlas_digital_fmabc/config/routes/router.dart';
-import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
+
 import "core/themes/theme.dart";
 
 class App extends StatelessWidget {
