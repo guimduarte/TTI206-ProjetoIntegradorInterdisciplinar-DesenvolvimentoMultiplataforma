@@ -18,7 +18,25 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: appBar,
-      body: Center(child: Text("Página de Login")),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            SizedBox(height: 8.0),
+            // Imagem
+            ClipRRect(
+              borderRadius: BorderRadiusGeometry.circular(12.0),
+              child: AspectRatio(
+                aspectRatio: 21 / 9,
+                child: Image.asset(
+                  "assets/images/bg/login-bg.jpg",
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
