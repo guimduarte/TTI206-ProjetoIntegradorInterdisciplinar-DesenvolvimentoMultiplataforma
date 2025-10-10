@@ -1,7 +1,6 @@
 import 'package:atlas_digital_fmabc/config/routes/routes.dart';
-import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 /// Modelo para representar um destino de navegação.
 class Destination {
