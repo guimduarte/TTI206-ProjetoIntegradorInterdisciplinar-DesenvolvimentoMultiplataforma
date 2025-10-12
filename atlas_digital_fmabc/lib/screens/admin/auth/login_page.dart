@@ -70,9 +70,11 @@ class LoginPage extends StatelessWidget {
           flex: (width < KBreakpoints.lg) ? 2 : 1,
           child: Scaffold(
             appBar: appBar,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: mainContent,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: mainContent,
+              ),
             ),
           ),
         ),
