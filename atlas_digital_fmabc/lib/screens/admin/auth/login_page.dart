@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/widgets/form/login_form.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:atlas_digital_fmabc/widgets/logo/logo.dart';
@@ -9,6 +10,11 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const imagePath = "assets/images/bg/login-bg.jpg";
+
+    final width = MediaQuery.of(context).size.width;
+    final isDesktop = width > KBreakpoints.md;
+
     /// AppBar da página de login.
     final appBar = AppBar(
       centerTitle: true,
@@ -44,10 +50,7 @@ class LoginPage extends StatelessWidget {
               borderRadius: BorderRadiusGeometry.circular(12.0),
               child: AspectRatio(
                 aspectRatio: 21 / 9,
-                child: Image.asset(
-                  "assets/images/bg/login-bg.jpg",
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset(imagePath, fit: BoxFit.cover),
               ),
             ),
 
@@ -57,6 +60,30 @@ class LoginPage extends StatelessWidget {
       ),
     );
 
-    return mobilePage;
+    /// Página de login para desktop.
+    final desktopPage = Row(
+      children: [
+        Expanded(
+          flex: (width < KBreakpoints.lg) ? 2 : 1,
+          child: Scaffold(
+            appBar: appBar,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: mainContent,
+            ),
+          ),
+        ),
+        // Imagem lateral
+        Expanded(
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            height: double.infinity,
+          ),
+        ),
+      ],
+    );
+
+    return isDesktop ? desktopPage : mobilePage;
   }
 }
