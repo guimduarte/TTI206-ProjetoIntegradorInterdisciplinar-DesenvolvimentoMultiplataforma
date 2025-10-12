@@ -32,7 +32,10 @@ class LoginPage extends StatelessWidget {
         // Logo da FMABC
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 96, vertical: 4),
-          child: Logo(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 64.0),
+            child: Logo(),
+          ),
         ),
       ],
     );
