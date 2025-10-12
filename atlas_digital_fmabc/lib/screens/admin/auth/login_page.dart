@@ -1,5 +1,6 @@
 import 'package:atlas_digital_fmabc/widgets/form/login_form.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
+import 'package:atlas_digital_fmabc/widgets/logo/logo.dart';
 import 'package:flutter/material.dart';
 
 /// Página de login para professores.
@@ -22,6 +23,11 @@ class LoginPage extends StatelessWidget {
       children: [
         // Form de login
         LoginForm(),
+        // Logo da FMABC
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 96, vertical: 4),
+          child: Logo(),
+        ),
       ],
     );
 

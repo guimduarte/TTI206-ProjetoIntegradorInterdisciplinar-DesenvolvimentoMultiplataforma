@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   fluentui_system_icons: ^1.1.273
   go_router: ^16.2.4
+  flutter_svg: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +24,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/bg/ # Imagens de fundo e de decoração
+    - assets/images/logo/ # Logo da FMABC e do Atlas Digital
