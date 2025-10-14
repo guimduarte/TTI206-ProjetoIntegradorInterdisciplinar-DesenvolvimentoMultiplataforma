@@ -19,7 +19,14 @@ Este projeto foi desenvolvido em parceria com o Instituto Mauá de Tecnologia e 
     </a>
 </div>
 
-<!-- TODO: Listar tecnologias utilizadas -->
+## 🛠️ Tecnologias Utilizadas
+
+<div style="display: flex; flex-direction: row; gap: 8px; flex-wrap: wrap; padding-bottom: 12px;">
+  <!-- Dart -->
+  <a href="https://dart.dev/" target="_blank"><img src="https://img.shields.io/badge/Dart-0175C2.svg?style=for-the-badge&logo=Dart&logoColor=white" height="40" alt="Dart"  /></a>
+  <!-- Flutter -->
+  <a href="https://flutter.dev/" target="_blank"><img src="https://img.shields.io/badge/Flutter-02569B.svg?style=for-the-badge&logo=Flutter&logoColor=white" height="40" alt="Flutter"  /></a>
+</div>
 
 ## 👨‍💻 Integrantes do Projeto
 
