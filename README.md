@@ -4,7 +4,20 @@
 
 Projeto desenvolvido como parte da disciplina **Projeto Integrador Interdisciplinar – Desenvolvimento Multiplataforma (TTI206)** dos cursos de Ciência da Computação e Inteligência Artificial e Ciência de Dados do [Instituto Mauá de Tecnologia](https://maua.br/). O projeto tem como objetivo o desenvolvimento de um Atlas Digital Interativo de Biologia Tecidual para a [FMABC](https://fmabc.br/), destinado a apoiar o ensino de citologia por meio da exploração de imagens microscópicas digitalizadas em altíssima resolução. A aplicação busca simular a experiência de observação em microscópio, permitindo ampliação, rotação, anotações e navegação fluida sobre lâminas de grande volume, além de oferecer uma interface intuitiva e multiplataforma para alunos e professores.
 
-<!-- TODO: Parceria -  adicionar logos do IMT e FMABC -->
+## 🤝 Parceria
+
+Este projeto foi desenvolvido em parceria com o Instituto Mauá de Tecnologia e a FMABC (Faculdade de Medicina do ABC).
+
+<div align="center" style="display: flex; flex-direction: row; align-items: center; width: 100%; justify-content: center; gap: 16px; flex-wrap: wrap;">
+    <!-- IMT -->
+    <a href="https://www.maua.br/" target="_blank">
+        <img height="112px" src="./docs/images/parceiros/logo-IMT.png" alt="Logo do Instituto Mauá de Tecnologia">
+    </a>
+    <!-- FMABC -->
+    <a href="https://fmabc.br/" target="_blank">
+        <img height="112px" src="./docs/images/parceiros/logo-FMABC.svg" alt="Logo da FMABC">
+    </a>
+</div>
 
 <!-- TODO: Listar tecnologias utilizadas -->
 
