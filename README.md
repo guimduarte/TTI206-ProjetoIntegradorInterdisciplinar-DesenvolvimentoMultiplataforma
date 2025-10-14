@@ -1,6 +1,12 @@
-Atlas Digital Interativo de Citologia
+# Atlas Digital Interativo de Citologia
 
-O projeto consiste na criação de um atlas digital interativo voltado para o ensino de citologia com o apoio de recursos digitais da FMABC.
+<!-- Descrição -->
+
+Projeto desenvolvido como parte da disciplina **Projeto Integrador Interdisciplinar – Desenvolvimento Multiplataforma (TTI206)** dos cursos de Ciência da Computação e Inteligência Artificial e Ciência de Dados do [Instituto Mauá de Tecnologia](https://maua.br/). O projeto tem como objetivo o desenvolvimento de um Atlas Digital Interativo de Biologia Tecidual para a [FMABC](https://fmabc.br/), destinado a apoiar o ensino de citologia por meio da exploração de imagens microscópicas digitalizadas em altíssima resolução. A aplicação busca simular a experiência de observação em microscópio, permitindo ampliação, rotação, anotações e navegação fluida sobre lâminas de grande volume, além de oferecer uma interface intuitiva e multiplataforma para alunos e professores.
+
+<!-- Parceria -->
+
+<!-- Autores -->
 
 Autores:
 
