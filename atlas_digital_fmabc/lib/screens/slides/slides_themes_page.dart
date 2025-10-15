@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Página de lâminas.
-class SlidesPage extends StatelessWidget {
-  const SlidesPage({super.key}); // Construtor padrão
+/// Página inicial da aba lâminas.
+/// Exibe uma caixa de pesquisa e os temas de lâminas.
+class SlidesThemesPage extends StatelessWidget {
+  const SlidesThemesPage({super.key}); // Construtor padrão
 
   @override
   Widget build(BuildContext context) {
