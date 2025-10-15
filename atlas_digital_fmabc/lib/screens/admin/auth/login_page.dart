@@ -51,9 +51,11 @@ class LoginPage extends StatelessWidget {
             // Imagem
             ClipRRect(
               borderRadius: BorderRadiusGeometry.circular(12.0),
-              child: AspectRatio(
-                aspectRatio: 21 / 9,
-                child: Image.asset(imagePath, fit: BoxFit.cover),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 160.0,
               ),
             ),
 
