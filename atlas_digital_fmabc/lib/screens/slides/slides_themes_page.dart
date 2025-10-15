@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:flutter/material.dart';
 
 /// Página inicial da aba lâminas.
@@ -15,7 +16,7 @@ class SlidesThemesPage extends StatelessWidget {
     );
   }
 
-  /// AppBar da página inicial.
+  /// AppBar da.
   AppBar _slidesAppBar(BuildContext context) {
     final theme = Theme.of(context);
     return AppBar(
@@ -23,11 +24,10 @@ class SlidesThemesPage extends StatelessWidget {
       backgroundColor: theme.colorScheme.primary,
       foregroundColor: theme.colorScheme.onPrimary,
       // título da página
-      title: Text(
-        "Explorar Lâminas",
-        style: theme.textTheme.headlineMedium?.copyWith(
-          color: theme.colorScheme.onPrimary,
-        ),
+      title: TitleAndSupportingText(
+        title: "Explorar Lâminas",
+        supportingText: "FMABC | Atlas Digital de Biologia Tecidual",
+        color: theme.colorScheme.onPrimary,
       ),
       centerTitle: true,
     );

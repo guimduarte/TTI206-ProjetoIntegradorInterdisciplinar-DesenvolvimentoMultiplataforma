@@ -6,17 +6,27 @@ class TitleAndSupportingText extends StatelessWidget {
     super.key,
     required this.title,
     required this.supportingText,
+    required this.color,
   });
 
   final String title;
   final String supportingText;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleLarge),
-        Text(supportingText, style: Theme.of(context).textTheme.labelMedium),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: color),
+        ),
+        Text(
+          supportingText,
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium!.copyWith(color: color),
+        ),
       ],
     );
   }
