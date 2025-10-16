@@ -1,4 +1,5 @@
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
+import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 
 /// Página inicial da aba lâminas.
@@ -12,11 +13,16 @@ class SlidesThemesPage extends StatelessWidget {
       // layout
       appBar: _slidesAppBar(context),
       // conteúdo
-      body: Column(children: [Text("Tópicos e lâminas")]),
+      body: Column(
+        children: [
+          // Barra de Pesquisa
+          SearchSection(),
+        ],
+      ),
     );
   }
 
-  /// AppBar da.
+  /// AppBar da página de lâminas.
   AppBar _slidesAppBar(BuildContext context) {
     final theme = Theme.of(context);
     return AppBar(
