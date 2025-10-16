@@ -1,11 +1,12 @@
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
+import 'package:atlas_digital_fmabc/widgets/lists/theme_lists.dart';
 import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 
 /// Página inicial da aba lâminas.
 /// Exibe uma caixa de pesquisa e os temas de lâminas.
-class SlidesThemesPage extends StatelessWidget {
-  const SlidesThemesPage({super.key}); // Construtor padrão
+class ExploreSlidesPage extends StatelessWidget {
+  const ExploreSlidesPage({super.key}); // Construtor padrão
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +14,14 @@ class SlidesThemesPage extends StatelessWidget {
       // layout
       appBar: _slidesAppBar(context),
       // conteúdo
-      body: Column(
-        children: [
-          // Barra de Pesquisa
-          SearchSection(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SearchSection(), // barra de Pesquisa
+            SizedBox(height: 20.0),
+            ThemeLists(), // lista de temas
+          ],
+        ),
       ),
     );
   }

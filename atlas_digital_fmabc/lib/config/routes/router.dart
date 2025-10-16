@@ -2,7 +2,7 @@ import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 import 'package:atlas_digital_fmabc/screens/admin/auth/login_page.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
-import 'package:atlas_digital_fmabc/screens/slides/slides_themes_page.dart';
+import 'package:atlas_digital_fmabc/screens/slides/explore_slides_page.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,7 +36,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: Routes.slidesPage,
-              builder: (context, state) => const SlidesThemesPage(),
+              builder: (context, state) => const ExploreSlidesPage(),
             ),
           ],
         ),
