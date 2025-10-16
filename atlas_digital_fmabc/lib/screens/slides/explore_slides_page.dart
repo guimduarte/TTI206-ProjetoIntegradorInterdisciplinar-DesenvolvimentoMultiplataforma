@@ -1,11 +1,17 @@
+import 'package:atlas_digital_fmabc/data/mock/mock_themes.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
+import 'package:atlas_digital_fmabc/widgets/lists/group_list.dart';
 import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 
 /// Página inicial da aba lâminas.
 /// Exibe uma caixa de pesquisa e os temas de lâminas.
 class ExploreSlidesPage extends StatelessWidget {
-  const ExploreSlidesPage({super.key}); // Construtor padrão
+  ExploreSlidesPage({super.key}); // Construtor padrão
+
+  // TODO: obter temas e turmas do BD
+
+  final themesList = mockThemes;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,12 @@ class ExploreSlidesPage extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: TabBarView(children: [Text("Temas"), Text("Turmas")]),
+              child: TabBarView(
+                children: [
+                  GroupList(list: mockThemes),
+                  Text("Turmas"),
+                ],
+              ),
             ),
           ],
         ),

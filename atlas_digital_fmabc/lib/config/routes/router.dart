@@ -36,7 +36,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: Routes.slidesPage,
-              builder: (context, state) => const ExploreSlidesPage(),
+              builder: (context, state) => ExploreSlidesPage(),
             ),
           ],
         ),
