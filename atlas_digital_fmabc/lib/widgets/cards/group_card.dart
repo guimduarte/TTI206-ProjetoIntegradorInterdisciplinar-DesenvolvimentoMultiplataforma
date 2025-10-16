@@ -12,25 +12,31 @@ class GroupCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 4.0,
-          children: [
-            // Nome do tema
-            Text(
-              group.name,
-              style: theme.textTheme.titleMedium,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            // Quantidade de lâminas
-            Text(
-              "${group.quantSlides} lâminas",
-              style: theme.textTheme.bodyMedium,
-            ),
-          ],
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: () {
+          // TODO: abrir página do grupo
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 4.0,
+            children: [
+              // Nome do tema
+              Text(
+                group.name,
+                style: theme.textTheme.titleMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // Quantidade de lâminas
+              Text(
+                "${group.quantSlides} lâminas",
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
+          ),
         ),
       ),
     );
