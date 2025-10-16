@@ -1,7 +1,7 @@
 import 'package:atlas_digital_fmabc/models/groups/group_model.dart';
 
 /// Modelo de dados dos temas das lâminas.
-class ThemesModel extends GroupModel {
+class ThemeModel extends GroupModel {
   // Construtor
-  ThemesModel({required super.name, super.quantSlides});
+  ThemeModel({required super.name, super.quantSlides});
 }
