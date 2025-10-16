@@ -15,7 +15,7 @@ class SearchSection extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 64.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 44.0),
         child: Center(child: searchBar(context)),
       ),
     );

@@ -15,6 +15,8 @@ class GroupCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 4.0,
           children: [
             // Nome do tema
             Text(group.name, style: theme.textTheme.titleMedium),

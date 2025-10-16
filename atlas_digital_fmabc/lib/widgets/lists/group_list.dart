@@ -10,15 +10,13 @@ class GroupList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView.separated(
-        itemCount: 10,
-        // espaçamento
-        separatorBuilder: (context, index) => const SizedBox(height: 14),
-        // cards
-        itemBuilder: (context, index) => GroupCard(group: list[index]),
-      ),
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      itemCount: 10,
+      // espaçamento
+      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+      // cards
+      itemBuilder: (context, index) => GroupCard(group: list[index]),
     );
   }
 }
