@@ -19,7 +19,12 @@ class GroupCard extends StatelessWidget {
           spacing: 4.0,
           children: [
             // Nome do tema
-            Text(group.name, style: theme.textTheme.titleMedium),
+            Text(
+              group.name,
+              style: theme.textTheme.titleMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             // Quantidade de lâminas
             Text(
               "${group.quantSlides} lâminas",
