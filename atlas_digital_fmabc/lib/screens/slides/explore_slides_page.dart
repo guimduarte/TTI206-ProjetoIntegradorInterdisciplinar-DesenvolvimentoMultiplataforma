@@ -1,5 +1,4 @@
 import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
-import 'package:atlas_digital_fmabc/widgets/lists/theme_lists.dart';
 import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 
@@ -10,16 +9,25 @@ class ExploreSlidesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // layout
-      appBar: _slidesAppBar(context),
-      // conteúdo
-      body: SingleChildScrollView(
-        child: Column(
+    return DefaultTabController(
+      length: 2, // número de abas
+      child: Scaffold(
+        // layout
+        appBar: _slidesAppBar(context),
+        // conteúdo
+        body: Column(
           children: [
             SearchSection(), // barra de Pesquisa
-            SizedBox(height: 20.0),
-            ThemeLists(), // lista de temas
+
+            TabBar(
+              tabs: [
+                Tab(text: "Temas"),
+                Tab(text: "Turmas"),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(children: [Text("Temas"), Text("Turmas")]),
+            ),
           ],
         ),
       ),
