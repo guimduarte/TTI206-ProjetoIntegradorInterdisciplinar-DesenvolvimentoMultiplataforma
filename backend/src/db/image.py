@@ -19,15 +19,17 @@ class ImageDB:
                     with open(join(dirpath, filename), "rb") as file:
                         base64_bytes = base64.b64encode(file.read())
                         data = base64_bytes.decode("ascii")
-                        xyz = f"{groups[0]}/{groups[1]}/{filename.split('.')[0]}"                        
+                        zxy = f"{groups[0]}/{groups[1]}/{filename.split('.')[0]}"                        
                         item = {
                             "image_name" : self.image_name,
-                            "xyz" : xyz,
+                            "zxy" : zxy,
                             "src" : data
                         }
                         self.db.insert_one(item)
         print("enviado")
 
-    def get_image(self, xyz : str):
-        image = self.db.find_one({"image_name" : self.image_name, "xyz" : xyz})
+    def get_image(self, zxy : str):
+        image = self.db.find_one({"image_name" : self.image_name, "zxy" : zxy})
+        if image is None:
+            return None
         return base64.b64decode(image["src"])

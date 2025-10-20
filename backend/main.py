@@ -33,15 +33,19 @@ async def root():
 @app.post("/image", status_code=status.HTTP_201_CREATED)
 async def upload_image(file: UploadFile):
     image_directory = decompress_file(file)
-    result = generate_image(image_directory)
-    if not result:
+    filename = generate_image(image_directory)
+    if not filename:
         raise HTTPException(status_code=status.HTTP_412_PRECONDITION_FAILED, detail="Houve um erro ao tentar criar a imagem")
+    imagedb = ImageDB(filename.split("/")[0], getDatabase(ImageDB.collection_name))
+    imagedb.save_image(filename)
     return {"message" : "sucesso"}
 
 
-@app.get("/image/{image_name}/{x}/{y}/{z}")
+@app.get("/image/{image_name}/{z}/{x}/{y}")
 async def get_image(image_name : Annotated[str, Path()], x : Annotated[int, Path()],
                     y : Annotated[int, Path()], z : Annotated[int, Path()]):
     imagedb = ImageDB(image_name, getDatabase(ImageDB.collection_name))
-    file = imagedb.get_image(f"{x}/{y}/{z}")
+    file = imagedb.get_image(f"{z}/{x}/{y}")
+    if file is None:
+        return None
     return Response(file)
