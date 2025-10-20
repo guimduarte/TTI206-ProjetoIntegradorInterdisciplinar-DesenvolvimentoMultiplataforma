@@ -1,6 +1,38 @@
-# Falta ligação com um banco em si. so criar
-# 
+# Logica mais basica.
+# preciso ainda colocar o limitador do email para que apenas os emails corretos possam ser aceitos
 
+from pymongo import MongoClient
+from werkzeug.security import generate_password_hash
+
+
+client = MongoClient("url do atlas")
+db = client['atlas_fmabc']
+colecaoUsuarios = db['usuarios']
+
+def cadastro_professor(email,nome,senha):
+    if db.usuario.find_one({'email':email}):
+        return "Erro: Esse email já foi utilizado para cadastro"
+    
+    novo_usuario = {
+        'nome': nome,
+        'email': email,
+        'senha': generate_password_hash(senha),
+        'tipo':'professor'
+    }
+    #
+    db.usuario.insert_one(novo_usuario)
+    return "Professor registrado"
+
+def autenticar_professor(email,senha):
+    usuario = db.usuario.find_one({'email':email})
+    
+    if usuario and check_password_hash(usuario['senhaHash'], senha):
+        is_admin = usuario.get('tipo') == 'admin'
+        return True, is_admin
+    return False, False
+        
+        
+        
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
