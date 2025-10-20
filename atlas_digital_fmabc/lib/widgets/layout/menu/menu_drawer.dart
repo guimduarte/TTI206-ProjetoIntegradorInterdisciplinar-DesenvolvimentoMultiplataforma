@@ -47,6 +47,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       ...railDestinations,
       ...contactDestinations,
       ...adminDestinations,
+      ...testeDestinations
     ];
 
     return SafeArea(
@@ -85,6 +86,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
           // Seção do Administrador
           _sectionHeader("Área do Administrador", theme),
           ...destinationsBuilder(adminDestinations),
+          _menuDivider,
+          
+          _sectionHeader("Teste", theme),
+          ...destinationsBuilder(testeDestinations)
         ],
       ),
     );

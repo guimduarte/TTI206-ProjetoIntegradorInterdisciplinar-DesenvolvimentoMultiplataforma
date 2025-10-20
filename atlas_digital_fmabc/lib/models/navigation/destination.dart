@@ -98,3 +98,11 @@ const contactDestinations = [
     selectedIcon: FluentIcons.call_24_filled,
   ),
 ];
+
+const testeDestinations = [
+  Destination(
+    label: "Teste",
+    icon: FluentIcons.alert_24_regular,
+    selectedIcon: FluentIcons.alert_24_filled,
+    route: Routes.nestedImagemPage
+)];
