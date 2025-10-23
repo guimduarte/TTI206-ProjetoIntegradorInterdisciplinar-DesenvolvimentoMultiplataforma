@@ -14,8 +14,8 @@ class GroupList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       itemCount: list.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 360,
-        mainAxisExtent: 90,
+        maxCrossAxisExtent: 360, // width máxima do card
+        mainAxisExtent: 94, // height do card
         // espaçamento
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
