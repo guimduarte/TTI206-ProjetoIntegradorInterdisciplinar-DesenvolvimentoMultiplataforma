@@ -64,15 +64,8 @@ class _MainLayoutState extends State<MainLayout> {
 
           selectedIndex: selectedIndex,
 
-          // Botão de menu
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: menuButton,
-          ),
-
           // Lista de destinos
-          destinations: railDestinations
-              .where((d) => d.label != "Menu") // não exibir menu nos destinos
+          destinations: mainDestinations
               .map(
                 (d) => NavigationRailDestination(
                   icon: Icon(d.icon),
@@ -83,8 +76,15 @@ class _MainLayoutState extends State<MainLayout> {
               .toList(),
           // Função executada ao selecionar um destino
           onDestinationSelected: (int index) {
-            // Navegar para a branch selecionada
-            widget.navigationShell.goBranch(index);
+            // Abrir drawer se for a aba de menu
+            if (mainDestinations[index].label == "Menu") {
+              _scaffoldKey.currentState?.openDrawer();
+            } else {
+              // navegar para a branch
+              widget.navigationShell.goBranch(
+                index,
+              ); // Função para mudar de aba
+            }
           },
         );
 
@@ -94,7 +94,7 @@ class _MainLayoutState extends State<MainLayout> {
               widget.navigationShell.currentIndex, // Índice da aba atual
           onDestinationSelected: (int index) {
             // Abrir drawer se for a aba de menu
-            if (index == MainLayout.menuIndex) {
+            if (mainDestinations[index].label == "Menu") {
               _scaffoldKey.currentState?.openEndDrawer();
             } else {
               // navegar para a branch
@@ -104,7 +104,7 @@ class _MainLayoutState extends State<MainLayout> {
             }
           },
           // Lista de destinos
-          destinations: mobileDestinations
+          destinations: mainDestinations
               .map(
                 // Montar widget de destino
                 (destination) => NavigationDestination(
