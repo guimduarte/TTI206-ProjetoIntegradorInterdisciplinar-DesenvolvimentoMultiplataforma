@@ -1,7 +1,6 @@
 import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/models/navigation/destination.dart';
 import 'package:atlas_digital_fmabc/widgets/layout/menu/menu_drawer.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,17 +36,6 @@ class _MainLayoutState extends State<MainLayout> {
 
         /// Índice selecionado no Navigation.
         final selectedIndex = widget.navigationShell.currentIndex;
-
-        /// Botão de menu para abrir
-        final menuButton = IconButton(
-          icon: Icon(FluentIcons.navigation_24_filled),
-          color: railForeground,
-          tooltip: "Menu",
-          onPressed: () {
-            // Abrir menu/drawer
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        );
 
         /// Widget de navegação lateral para desktop.
         final rail = NavigationRail(
