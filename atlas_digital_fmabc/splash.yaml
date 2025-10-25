@@ -1,0 +1,20 @@
+# Configuração da Splash Screen (tela de inicialização)
+flutter_native_splash:
+  # Background color da splash screen (para tema claro e escuro)
+  color: "#ffffff"
+  color_dark: "#272727"
+  # Imagem da logo
+  image: assets/logos/logo_fmabc.png
+  image_dark: assets/logos/logo_fmabc_white.png
+
+  # Configurações específicas para Android 12+
+  android_12:
+    # Background color da splash screen (para tema claro e escuro)
+    color: "#ffffff"
+    color_dark: "#272727"
+    # Imagem da logo
+    image: assets/logos/logo_fmabc.png
+    image_dark: assets/logos/logo_fmabc_white.png
+
+  # Se deve exibir para web
+  web: true
