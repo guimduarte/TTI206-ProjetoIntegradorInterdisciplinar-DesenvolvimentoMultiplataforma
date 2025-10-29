@@ -12,6 +12,6 @@ class Logo extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final fileName = isDark ? whiteFile : colorfulFile;
 
-    return Image.asset("assets/images/logo/$fileName");
+    return Image.asset("assets/logos/$fileName");
   }
 }

@@ -25,7 +25,7 @@ class Destination {
 }
 
 /// Lista dos destinos para as principais páginas do aplicativo.
-const mobileDestinations = [
+const mainDestinations = [
   Destination(
     label: "Início",
     icon: FluentIcons.home_24_regular,
@@ -56,7 +56,7 @@ const mobileDestinations = [
 
 /// Destinos para o menu lateral.
 final railDestinations = [
-  ...mobileDestinations.sublist(0, 3),
+  ...mainDestinations.sublist(0, 3),
   const Destination(
     label: "Pesquisar",
     icon: FluentIcons.search_24_regular,
