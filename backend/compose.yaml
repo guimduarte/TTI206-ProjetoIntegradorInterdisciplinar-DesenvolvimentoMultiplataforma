@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    networks:
+      - front-tier
+      - back-tier
+
+  database:
+    image: mongodb/mongodb-community-server
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/etc/data
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+    name: "pi-db"
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}

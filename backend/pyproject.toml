@@ -11,7 +11,7 @@ dependencies = [
     "pymongo[srv]>=4.15.3",
     "python-dotenv>=1.1.1",
     "python-multipart>=0.0.20",
-    "pyvips[binary]>=3.0.0",
+    "pyvips >=3.0.0",
 ]
 [tool.pyright]
 venvPath="."
