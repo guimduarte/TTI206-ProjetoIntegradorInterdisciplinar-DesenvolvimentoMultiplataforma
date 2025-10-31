@@ -1,7 +1,7 @@
 import 'package:atlas_digital_fmabc/config/routes/router.dart';
 import 'package:flutter/material.dart';
 
-import "core/themes/theme.dart";
+import "utils/themes/theme.dart";
 
 class App extends StatelessWidget {
   const App({super.key});
