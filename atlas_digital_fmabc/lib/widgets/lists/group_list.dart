@@ -1,5 +1,5 @@
 import 'package:atlas_digital_fmabc/models/groups/group_model.dart';
-import 'package:atlas_digital_fmabc/widgets/cards/group_card.dart';
+import 'package:atlas_digital_fmabc/common/widgets/cards/group_card.dart';
 import 'package:flutter/material.dart';
 
 /// Seção de lista de temas.
