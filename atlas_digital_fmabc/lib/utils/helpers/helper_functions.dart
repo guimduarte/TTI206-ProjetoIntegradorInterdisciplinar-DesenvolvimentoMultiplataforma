@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Helper functions para usos gerais.
-class THelperFunctions {
+class HelperFunctions {
   /// Obter a safe area superior do dispositivo.
   static double getTopSafeArea(BuildContext context) {
     return MediaQuery.of(context).viewPadding.top;
