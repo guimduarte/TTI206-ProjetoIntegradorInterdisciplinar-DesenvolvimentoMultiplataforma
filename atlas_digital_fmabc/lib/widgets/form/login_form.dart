@@ -11,20 +11,23 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late String _email;
+  late String _senha;
   final AuthService _authService = AuthService(); 
 
   bool _isLoading = false;      
   bool _obscurePassword = true; 
   bool rememberMe = false;      
-  
+
+  @override
+  void initState() {
+    _email = "";
+    _senha = "";
+  }
 
   void _handleLogin() async {
-    final String email = _emailController.text;
-    final String password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (_email.isEmpty || _senha.isEmpty) {
       _showSnackBar('Por favor, insira seu e-mail e senha.', isError: true);
       return;
     }
@@ -35,8 +38,8 @@ class _LoginFormState extends State<LoginForm> {
 
     // 3. Call the Backend API
     final String? error = await _authService.login(
-      email: email,
-      password: password,
+      email: _email,
+      password: _senha,
     );
 
 
@@ -84,7 +87,9 @@ class _LoginFormState extends State<LoginForm> {
     );
 
     final emailField = TextField(
-      controller: _emailController, 
+      onChanged: (valor) => setState(() {
+        _email = valor;
+      }),
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: fieldBorder,
@@ -95,7 +100,9 @@ class _LoginFormState extends State<LoginForm> {
     );
 
     final passwordField = TextField(
-      controller: _passwordController, 
+      onChanged: (valor) => setState(() {
+        _senha = valor;
+      }),
       keyboardType: TextInputType.visiblePassword,
       obscureText: _obscurePassword, 
       decoration: InputDecoration(
@@ -179,8 +186,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 }

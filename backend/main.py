@@ -8,6 +8,9 @@ import tempfile
 from src.db.image import ImageDB
 from pymongo import MongoClient
 from src.image import generate_image, decompress_file
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
+from src.db.logicalogin import cadastro_professor, autenticar_professor
 
 config = dotenv_values(".env")
 
@@ -22,6 +25,12 @@ async def lifespan(app: FastAPI):
     app.mongodb_client.close()
     
 app = FastAPI(lifespan=lifespan)    
+app.add_middleware(CORSMiddleware,
+                   allow_origins="*",
+                   allow_credentials=True,
+                   allow_methods=["*"],
+                   allow_headers=["*"],
+                   )
 
 def getDatabase(collection_name : str):
     return app.database[collection_name]
@@ -49,3 +58,41 @@ async def get_image(image_name : Annotated[str, Path()], x : Annotated[int, Path
     if file is None:
         return None
     return Response(file)
+
+@app.post('/register')
+async def register(request: Request):
+    data = await request.json()
+    email_professor = data.get('email_professor')
+    nome = data.get('nome_professor')
+    senha = data.get('senha')
+
+    if not email_professor or not senha or not nome:
+        return {'success': False, 'message': 'Email, nome e senha são obrigatórios.'}
+
+    mensagem = cadastro_professor(app.database, email_professor,nome, senha)
+    if "sucesso" in mensagem.lower():
+        return {'success': True, 'message': mensagem}
+    else:
+        return {'success': False, 'message': mensagem}
+
+@app.post('/login')
+async def login(request: Request):
+    data = await request.json()
+    print(data)
+    email_professor = data['email']
+    senha = data['password']
+
+    print(f"Recebida tentativa de login para: {email_professor}")
+    print(f"Senha fornecida: {senha}")
+
+    if not email_professor or not senha:
+        print("Erro: Email e senha são obrigatórios.")
+        return {'success': False, 'message': 'Email e senha são obrigatórios.'}
+
+    senha_correta, is_admin = autenticar_professor(app.database,email_professor, senha)
+    if senha_correta:
+        print(f"Login bem-sucedido para: {email_professor}, isAdmin: {is_admin}")
+        return {'success': True, 'message': 'Login realizado com sucesso!', 'numero_cliente': email_professor, 'is_admin': is_admin}
+    else:
+        print(f"Falha no login para: {email_professor}")
+        return {'success': False, 'message': 'Credenciais inválidas.'}

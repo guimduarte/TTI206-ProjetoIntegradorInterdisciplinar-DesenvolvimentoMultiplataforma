@@ -1,80 +1,54 @@
-# Logica mais basica.
-# preciso ainda colocar o limitador do email para que apenas os emails corretos possam ser aceitos
-
 from pymongo import MongoClient
-from werkzeug.security import generate_password_hash
+import bcrypt
+import datetime
+import jwt
+from datetime import date, timedelta, timezone, datetime
+from dotenv import dotenv_values
 
+config = dotenv_values(".env")
+SECRET_KEY = config["SECRET_KEY"]
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
-client = MongoClient("url do atlas")
-db = client['atlas_fmabc']
-colecaoUsuarios = db['usuarios']
+def verify_password(plain_password, hashed_password):
+    return bcrypt.checkpw(
+        plain_password.encode("utf-8"),
+        hashed_password.encode("utf-8"),
+    )
 
-def cadastro_professor(email,nome,senha):
+def get_password_hash(password):
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def get_current_user(token: str):
+    pass
+
+def cadastro_professor(db, email,nome,senha):
     if db.usuario.find_one({'email':email}):
         return "Erro: Esse email já foi utilizado para cadastro"
     
     novo_usuario = {
         'nome': nome,
         'email': email,
-        'senha': generate_password_hash(senha),
+        'senha': get_password_hash(senha),
         'tipo':'professor'
     }
-    #
     db.usuario.insert_one(novo_usuario)
     return "Professor registrado"
 
-def autenticar_professor(email,senha):
+def autenticar_professor(db, email,senha):
     usuario = db.usuario.find_one({'email':email})
-    
-    if usuario and check_password_hash(usuario['senhaHash'], senha):
+    if usuario and verify_password(senha, usuario['senha']):
         is_admin = usuario.get('tipo') == 'admin'
         return True, is_admin
     return False, False
         
-        
-        
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.json
-    email_professor = data.get('email_professor')
-    nome = data.get('nome_professor')
-    senha = data.get('senha')
-
-    if not email_professor or not senha or not nome:
-        return jsonify({'success': False, 'message': 'Email, nome e senha são obrigatórios.'}), 400
-
-    mensagem = registrar_professor(email_professor, senha)
-    if "sucesso" in mensagem.lower():
-        return jsonify({'success': True, 'message': mensagem}), 201
-    else:
-        return jsonify({'success': False, 'message': mensagem}), 400
-
-@app.route('/login', methods=['OPTIONS'])
-def handle_login_options():
-    """Handles OPTIONS requests for /login."""
-    response = jsonify()
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    return response
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    email_professor = data.get('email_professor')
-    senha = data.get('senha')
-
-    print(f"Recebida tentativa de login para: {email_professor}")
-    print(f"Senha fornecida: {senha}")
-
-    if not email_professor or not senha:
-        print("Erro: Email e senha são obrigatórios.")
-        return jsonify({'success': False, 'message': 'Email e senha são obrigatórios.'}), 400
-
-    senha_correta, is_admin = autenticar_professor(email_professor, senha)
-    if senha_correta:
-        print(f"Login bem-sucedido para: {email_professor}, isAdmin: {is_admin}")
-        return jsonify({'success': True, 'message': 'Login realizado com sucesso!', 'numero_cliente': email_professor, 'is_admin': is_admin}), 200
-    else:
-        print(f"Falha no login para: {email_professor}")
-        return jsonify({'success': False, 'message': 'Credenciais inválidas.'}), 401

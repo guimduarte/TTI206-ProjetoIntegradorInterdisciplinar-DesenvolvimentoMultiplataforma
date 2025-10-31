@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String _baseUrl = 'mongodb://localhost:27017/'; 
+  static const String _baseUrl = 'http://localhost:8000';
   
 
   Future<String?> register({
