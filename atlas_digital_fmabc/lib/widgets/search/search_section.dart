@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/utils/constants/image_strings.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class SearchSection extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/bg/search-bg.png"),
+          image: AssetImage(KImages.microscope02),
           fit: BoxFit.cover,
         ),
       ),

@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = HelperFunctions.isDarkMode(context);
 
-    const imagePath = "assets/images/bg/login-bg.jpg";
+    const imagePath = KImages.microscope01;
 
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > KBreakpoints.md;

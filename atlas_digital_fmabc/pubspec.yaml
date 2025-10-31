@@ -26,4 +26,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logos/ # Logo da FMABC e do Atlas Digital
-    - assets/images/bg/ # Imagens de fundo e de decoração
+    - assets/images/microscope/ # Imagens de microscópios
