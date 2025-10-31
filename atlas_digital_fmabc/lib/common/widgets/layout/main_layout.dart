@@ -1,6 +1,6 @@
 import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/models/navigation/destination.dart';
-import 'package:atlas_digital_fmabc/widgets/layout/menu/menu_drawer.dart';
+import 'package:atlas_digital_fmabc/common/widgets/layout/menu/menu_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

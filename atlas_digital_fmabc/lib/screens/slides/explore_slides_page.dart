@@ -1,5 +1,5 @@
 import 'package:atlas_digital_fmabc/data/mock/mock_themes.dart';
-import 'package:atlas_digital_fmabc/widgets/layout/app_bar/title_and_supporting_text.dart';
+import 'package:atlas_digital_fmabc/common/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:atlas_digital_fmabc/widgets/lists/group_list.dart';
 import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
