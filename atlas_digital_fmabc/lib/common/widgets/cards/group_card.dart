@@ -1,4 +1,5 @@
 import 'package:atlas_digital_fmabc/models/groups/group_model.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 /// Card de tema.
@@ -31,9 +32,19 @@ class GroupCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               // Quantidade de lâminas
-              Text(
-                "${group.quantSlides} lâminas",
-                style: theme.textTheme.bodyMedium,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                spacing: 2.0,
+                children: [
+                  Icon(
+                    FluentIcons.microscope_20_filled,
+                    color: theme.colorScheme.outline,
+                  ),
+                  Text(
+                    group.quantSlides.toString(),
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
               ),
             ],
           ),
