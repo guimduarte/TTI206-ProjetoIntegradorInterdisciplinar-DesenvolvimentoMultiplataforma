@@ -1,9 +1,8 @@
+import 'package:atlas_digital_fmabc/common/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:atlas_digital_fmabc/data/constants/constants.dart';
 import 'package:atlas_digital_fmabc/utils/constants/image_strings.dart';
 import 'package:atlas_digital_fmabc/utils/helpers/helper_functions.dart';
 import 'package:atlas_digital_fmabc/widgets/form/login_form.dart';
-import 'package:atlas_digital_fmabc/common/widgets/layout/app_bar/title_and_supporting_text.dart';
-import 'package:atlas_digital_fmabc/widgets/logo/logo.dart';
 import 'package:flutter/material.dart';
 
 /// Página de login para professores.
