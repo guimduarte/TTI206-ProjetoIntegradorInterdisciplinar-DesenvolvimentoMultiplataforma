@@ -473,7 +473,7 @@ dependencies = [
     { name = "pymongo" },
     { name = "python-dotenv" },
     { name = "python-multipart" },
-    { name = "pyvips", extra = ["binary"] },
+    { name = "pyvips" },
 ]
 
 [package.metadata]
@@ -486,7 +486,7 @@ requires-dist = [
     { name = "pymongo", extras = ["srv"], specifier = ">=4.15.3" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "python-multipart", specifier = ">=0.0.20" },
-    { name = "pyvips", extras = ["binary"], specifier = ">=3.0.0" },
+    { name = "pyvips", specifier = ">=3.0.0" },
 ]
 
 [[package]]
@@ -648,32 +648,6 @@ dependencies = [
     { name = "cffi" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/4c/a2/d8ecd2f7ffa084870ba071a584aac44800a89f3c77b305999be7dc8b7bb3/pyvips-3.0.0.tar.gz", hash = "sha256:79459975e4a16089b0eaafed26eb1400ae66ebc16d3ff3a7d2241abcf19dc9e8", size = 56806, upload-time = "2025-04-28T10:07:43.784Z" }
-
-[package.optional-dependencies]
-binary = [
-    { name = "pyvips-binary" },
-]
-
-[[package]]
-name = "pyvips-binary"
-version = "8.17.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cffi" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7f/d5/9a10b120a85f945eca0992442dcc90ff6154ad66f44d03ec611d10333252/pyvips_binary-8.17.2.tar.gz", hash = "sha256:6c7c2d4b541aa424b33ee9d2949542c2f5a5b32a04dd63f65ce0711c62498136", size = 3750, upload-time = "2025-09-15T17:12:04.548Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/14/e7/43c319108afdeff167f09e200ee8208dce59dbb1fddfefb22be86a5b4964/pyvips_binary-8.17.2-cp37-abi3-macosx_10_15_x86_64.whl", hash = "sha256:9511ec9b3d021429fd0646bb0a85ce4b89733077a55ae6f3358f99c188948174", size = 8177729, upload-time = "2025-09-15T17:11:45.395Z" },
-    { url = "https://files.pythonhosted.org/packages/cc/ca/436cc80281d11c0f9f98b07d6859d68930e07abcfbc0003227c56dd74bd1/pyvips_binary-8.17.2-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:1025de708a35a6eebaccf9607574fde0259eb272e196286a9c0ad33ee8a257d7", size = 7285592, upload-time = "2025-09-15T17:11:47.159Z" },
-    { url = "https://files.pythonhosted.org/packages/6e/c5/e9c991ad1d92b49b1270987959f044c78d8496dbbeedce49c8e9b0aa7e9d/pyvips_binary-8.17.2-cp37-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:de4c788e6f491edcc461a8be7f2f279d3cbd3406ba0d855f8286fb2faae03ee6", size = 7452770, upload-time = "2025-09-15T17:11:48.884Z" },
-    { url = "https://files.pythonhosted.org/packages/29/12/f773cc7f596c99249c3cb3133e9bf7c9714627a0322c936caa51f7a13758/pyvips_binary-8.17.2-cp37-abi3-manylinux_2_26_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:3382ea882aab23f03d0fd91aeb4315ca47b564a33776de24454d940ade4587d5", size = 7250104, upload-time = "2025-09-15T17:11:51.112Z" },
-    { url = "https://files.pythonhosted.org/packages/0e/17/e20746cb20125b9017dc37ac88aeeb9f706e99d6d287d4a92e09ac01e125/pyvips_binary-8.17.2-cp37-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9389c0250091d9e2498fffa0ced75e44004f5117d40de4a11a3596b71a160d77", size = 7367434, upload-time = "2025-09-15T17:11:53.042Z" },
-    { url = "https://files.pythonhosted.org/packages/e8/a6/b6aa293226f5be2414a83fbdda213b80e8a7dbf9d27296f43bf8c10c2dd4/pyvips_binary-8.17.2-cp37-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:13b8a8bace970fdba9ecbdb30ab41b60263f51f2a85cbc393e44c427b134dd3d", size = 7603299, upload-time = "2025-09-15T17:11:55.014Z" },
-    { url = "https://files.pythonhosted.org/packages/67/3d/c301b2c29d4c4745c2a5c2e13ed592cf010a4ce60601d0a914091f154cc4/pyvips_binary-8.17.2-cp37-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:e471ee1270c0655511cae20f91465a4f1800acfff93bf41bc40929c8dd0383cd", size = 7476941, upload-time = "2025-09-15T17:11:56.557Z" },
-    { url = "https://files.pythonhosted.org/packages/a3/13/f12dcb91f9b351ff503428ed0b8ebec716c61bd376a8424e54440f8b0be2/pyvips_binary-8.17.2-cp37-abi3-win32.whl", hash = "sha256:beb5759d4b5b6f558a7312dba568e532ea52f5390e5e0353f5f28fb6a038de02", size = 8071776, upload-time = "2025-09-15T17:11:58.363Z" },
-    { url = "https://files.pythonhosted.org/packages/bd/8e/ed4d575f6b779193b56bae459aa07d16471d6d07fd8fb65afca6a516f297/pyvips_binary-8.17.2-cp37-abi3-win_amd64.whl", hash = "sha256:9b5d7e1618546389d02b6fc84ac4163aa524d1e321ef3180f9e69366bcf1ef32", size = 8045861, upload-time = "2025-09-15T17:12:00.026Z" },
-    { url = "https://files.pythonhosted.org/packages/c1/d6/f0c97c32088ee3e5ad51c380494f6daf9fc3d9ff5fad5de9c0ca90c25820/pyvips_binary-8.17.2-cp37-abi3-win_arm64.whl", hash = "sha256:60e34d2c587fc56291d2c17d6e865f21b68e2744123a9d2493cb10486b835c47", size = 7280426, upload-time = "2025-09-15T17:12:02.827Z" },
-]
 
 [[package]]
 name = "pyyaml"
