@@ -12,13 +12,14 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - db-data:/etc/data
+      - db-data:/data/db
     networks:
       - back-tier
 
 volumes:
   db-data:
     name: "pi-db"
+    external: true
 
 networks:
   # The presence of these objects is sufficient to define them
