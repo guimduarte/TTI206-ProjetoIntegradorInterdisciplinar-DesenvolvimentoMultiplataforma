@@ -1,4 +1,5 @@
 from io import BytesIO
+from PIL.Image import Image, Resampling, fromarray
 import os
 from fastapi import UploadFile
 import pyvips
@@ -34,8 +35,12 @@ def decompress_file(upload_file : UploadFile):
 
 def generate_thumbnail(filename : str):
     slide = openslide.OpenSlide(filename)
-    image = slide.get_thumbnail((1920, 1080))
+    print(slide.properties)
+    slide_image = pyvips.Image.openslideload(f"{filename}", autocrop = True)
+    numpy_array = slide_image.numpy()
+    image = fromarray(numpy_array)
     temp = BytesIO()
+    image.thumbnail((1024,1024), Resampling.LANCZOS)
     image.save(temp, format="png")
     return temp.getvalue()
     
