@@ -46,3 +46,9 @@ class ImageDB:
         if image is None:
             return None
         return base64.b64decode(image["src"])
+
+    def get_thumbnail(self):
+        image = self.db.find_one({"image_name" : self.image_name})
+        if image is None:
+            return None
+        return base64.b64decode(image["thumbnail"])

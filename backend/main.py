@@ -61,6 +61,15 @@ async def get_image(image_name : Annotated[str, Path()], x : Annotated[int, Path
         return None
     return Response(file)
 
+@app.get("/thumbnail/{image_name}")
+async def get_thumbnail(image_name : Annotated[str, Path()]):
+    imagedb = ImageDB(image_name, getDatabase("image_info"))
+    file = imagedb.get_thumbnail()
+    if file is None:
+        return None
+    return Response(file)
+
+
 @app.post('/register')
 async def register(request: Request):
     data = await request.json()
