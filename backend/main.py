@@ -7,7 +7,7 @@ from dotenv import dotenv_values
 import tempfile
 from src.db.image import ImageDB
 from pymongo import MongoClient
-from src.image import generate_image, decompress_file
+from src.image import generate_image, decompress_file, generate_thumbnail
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from src.db.logicalogin import cadastro_professor, autenticar_professor
@@ -47,6 +47,8 @@ async def upload_image(file: UploadFile):
         raise HTTPException(status_code=status.HTTP_412_PRECONDITION_FAILED, detail="Houve um erro ao tentar criar a imagem")
     imagedb = ImageDB(filename.split("/")[0], getDatabase(ImageDB.collection_name))
     imagedb.save_image(filename)
+    imagedb.db = getDatabase("image_info")
+    imagedb.save_thumbnail(generate_thumbnail(image_directory))
     return {"message" : "sucesso"}
 
 

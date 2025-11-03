@@ -1,10 +1,11 @@
+from io import BytesIO
 import os
 from fastapi import UploadFile
 import pyvips
 import osgeo_utils.gdal2tiles
 import gzip
 import tarfile
-
+import openslide
 
 def generate_image(filename : str):
     image = pyvips.Image.openslideload(f"{filename}", autocrop = True)
@@ -30,3 +31,12 @@ def decompress_file(upload_file : UploadFile):
         result_filename = [filename for filename in tar.getnames() if filename.endswith(".mrxs")][0]
     print(result_filename)
     return result_filename
+
+def generate_thumbnail(filename : str):
+    slide = openslide.OpenSlide(filename)
+    image = slide.get_thumbnail((1920, 1080))
+    temp = BytesIO()
+    image.save(temp, format="png")
+    return temp.getvalue()
+    
+    

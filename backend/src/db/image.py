@@ -1,7 +1,9 @@
+from io import BytesIO
 import re
 from os import walk
 from os.path import join
 import base64
+from PIL.Image import Image
 
 class ImageDB:
     collection_name = "images"
@@ -27,7 +29,18 @@ class ImageDB:
                         }
                         self.db.insert_one(item)
         print("enviado")
-
+        
+    def save_thumbnail(self, image_bytes : bytes):
+        base64_bytes = base64.b64encode(image_bytes)
+        data = base64_bytes.decode("ascii")
+        image = {
+            "image_name" : self.image_name,
+            "thumbnail" : data
+        }
+        self.db.insert_one(image)
+        print("thumbnail criada")
+        
+        
     def get_image(self, zxy : str):
         image = self.db.find_one({"image_name" : self.image_name, "zxy" : zxy})
         if image is None:
