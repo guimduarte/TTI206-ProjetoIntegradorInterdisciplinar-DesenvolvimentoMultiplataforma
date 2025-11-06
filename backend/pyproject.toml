@@ -9,6 +9,7 @@ dependencies = [
     "fastapi[standard]>=0.119.0",
     "gdal==3.11.3",
     "numpy>=2.3.3",
+    "openslide-python>=1.4.2",
     "pyjwt>=2.10.1",
     "pymongo[srv]>=4.15.3",
     "python-dotenv>=1.1.1",
