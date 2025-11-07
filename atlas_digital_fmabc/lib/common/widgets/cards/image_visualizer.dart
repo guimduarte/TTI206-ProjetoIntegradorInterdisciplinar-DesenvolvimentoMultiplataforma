@@ -38,7 +38,7 @@ class ImageVisualizerState extends State<ImageVisualizer> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'http://localhost:8000/image/'+widget.imageName+'/{z}/{x}/{y}',
+                urlTemplate: 'http://localhost:8000/image/${widget.imageName}/{z}/{x}/{y}',
                 tms: true,
                 tileProvider: NetworkTileProvider(
                   cachingProvider: const DisabledMapCachingProvider()

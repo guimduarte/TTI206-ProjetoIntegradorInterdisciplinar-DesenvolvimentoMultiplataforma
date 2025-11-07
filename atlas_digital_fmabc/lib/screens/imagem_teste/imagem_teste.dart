@@ -1,4 +1,4 @@
-import 'package:atlas_digital_fmabc/widgets/cards/image_visualizer.dart';
+ import 'package:atlas_digital_fmabc/common/widgets/cards/image_visualizer.dart';
 import 'package:flutter/material.dart';
 
 /// Página de itens salvos.
