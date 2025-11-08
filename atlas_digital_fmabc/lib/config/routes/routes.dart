@@ -10,6 +10,8 @@ class Routes {
   // Rotas admin
   static const String loginPage = "login";
   static const String nestedLoginPage = "/menu/login";
+  static const String adminPage = "/admin";
+  static const String professorPage = "/professor";
 
   //Rota da imagem teste
   static const String imagemTeste = "teste";

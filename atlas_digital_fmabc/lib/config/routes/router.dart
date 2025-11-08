@@ -1,5 +1,7 @@
 import 'package:atlas_digital_fmabc/config/routes/routes.dart';
+import 'package:atlas_digital_fmabc/screens/admin/admin_page.dart';
 import 'package:atlas_digital_fmabc/screens/admin/auth/login_page.dart';
+import 'package:atlas_digital_fmabc/screens/admin/professor_page.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:atlas_digital_fmabc/screens/imagem_teste/imagem_teste.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
@@ -17,6 +19,17 @@ final router = GoRouter(
   initialLocation: Routes.homePage, // rota inicial
   // Lista de rotas
   routes: [
+    // Rotas para o login
+    GoRoute(
+      path: Routes.adminPage,
+      builder: (context, state) => const AdminPage(),
+    ),
+    GoRoute(
+      path: Routes.professorPage,
+      builder: (context, state) => const ProfessorPage(),
+
+    ),
+    
     StatefulShellRoute.indexedStack(
       // Rota raiz com abas de navegação
       builder: (context, state, navigationShell) =>
