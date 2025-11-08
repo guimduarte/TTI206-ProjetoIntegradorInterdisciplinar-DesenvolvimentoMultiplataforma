@@ -55,7 +55,7 @@ def cadastro_professor(db, email,nome,senha):
 def autenticar_professor(db, email,senha):
     usuario = db.usuario.find_one({'email':email})
     if usuario and verify_password(senha, usuario['senha']):
-        is_admin = usuario.get('tipo') == 'admin'
-        return create_access_token({"admin" : is_admin, "nome" : usuario.nome, "email" : usuario.email}), is_admin
+        is_admin = usuario["tipo"] == 'admin'
+        return create_access_token({"admin" : is_admin, "nome" : usuario["nome"], "email" : usuario["email"]}), is_admin
     return None, None
         

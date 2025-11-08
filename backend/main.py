@@ -100,7 +100,7 @@ async def login(request: Request):
 
     if not email_professor or not senha:
         print("Erro: Email e senha são obrigatórios.")
-        return HTTPException(status_code= HTTP_406_NOT_ACCEPTABLE, detail='Email e senha são obrigatórios.')
+        raise HTTPException(status_code= HTTP_406_NOT_ACCEPTABLE, detail='Email e senha são obrigatórios.')
 
     token, is_admin = autenticar_professor(app.database,email_professor, senha)
     if token is not None:
@@ -108,4 +108,5 @@ async def login(request: Request):
         return {'token': token, "is_admin" : is_admin}
     else:
         print(f"Falha no login para: {email_professor}")
-        return HTTPException(status_code= HTTP_401_UNAUTHORIZED ,detail='Credenciais inválidas.')
+        raise HTTPException(status_code= HTTP_401_UNAUTHORIZED ,detail='Credenciais inválidas.')
+
