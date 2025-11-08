@@ -5,6 +5,8 @@ from fastapi import FastAPI, HTTPException, Path, Request, Response, UploadFile,
 import json
 from dotenv import dotenv_values
 import tempfile
+
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
 from src.db.image import ImageDB
 from pymongo import MongoClient
 from src.image import generate_image, decompress_file, generate_thumbnail
@@ -86,7 +88,7 @@ async def register(request: Request):
     else:
         return {'success': False, 'message': mensagem}
 
-@app.post('/login')
+@app.post('/login', status_code=status.HTTP_200_OK)
 async def login(request: Request):
     data = await request.json()
     print(data)
@@ -98,12 +100,12 @@ async def login(request: Request):
 
     if not email_professor or not senha:
         print("Erro: Email e senha são obrigatórios.")
-        return {'success': False, 'message': 'Email e senha são obrigatórios.'}
+        return HTTPException(status_code= HTTP_406_NOT_ACCEPTABLE, detail='Email e senha são obrigatórios.')
 
-    senha_correta, is_admin = autenticar_professor(app.database,email_professor, senha)
-    if senha_correta:
-        print(f"Login bem-sucedido para: {email_professor}, isAdmin: {is_admin}")
-        return {'success': True, 'message': 'Login realizado com sucesso!', 'numero_cliente': email_professor, 'is_admin': is_admin}
+    token, is_admin = autenticar_professor(app.database,email_professor, senha)
+    if token is not None:
+        print(f"Login bem-sucedido para: {email_professor}")
+        return {'token': token, "is_admin" : is_admin}
     else:
         print(f"Falha no login para: {email_professor}")
-        return {'success': False, 'message': 'Credenciais inválidas.'}
+        return HTTPException(status_code= HTTP_401_UNAUTHORIZED ,detail='Credenciais inválidas.')

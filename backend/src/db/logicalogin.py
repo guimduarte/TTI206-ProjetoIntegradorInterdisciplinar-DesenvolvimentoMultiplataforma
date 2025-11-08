@@ -29,8 +29,15 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def get_current_user(token: str):
-    pass
+def get_current_user(token: str, db):
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    email = payload.get("email")
+    if email is None:
+        return None
+    usuario = db.usuario.find_one({'email':email})
+    if usuario is None:
+        return None
+    return usuario
 
 def cadastro_professor(db, email,nome,senha):
     if db.usuario.find_one({'email':email}):
@@ -49,6 +56,6 @@ def autenticar_professor(db, email,senha):
     usuario = db.usuario.find_one({'email':email})
     if usuario and verify_password(senha, usuario['senha']):
         is_admin = usuario.get('tipo') == 'admin'
-        return True, is_admin
-    return False, False
+        return create_access_token({"admin" : is_admin, "nome" : usuario.nome, "email" : usuario.email}), is_admin
+    return None, None
         
