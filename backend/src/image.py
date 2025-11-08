@@ -19,15 +19,10 @@ def generate_image(filename : str):
     except Exception as e:
         return None
     
-def decompress_file(upload_file : UploadFile):
-    new_filename = upload_file.filename
-    if new_filename is None:
-        new_filename = "temp.tar.gz"
-    new_filename = new_filename.removesuffix(".gz")
-    with gzip.open(upload_file.file) as file, gzip.open(f"{new_filename}", "wb") as tarball:
-        decompressed_file = file.read()
-        tarball.write(decompressed_file)
-    with tarfile.open(f"{new_filename}") as tar:
+def decompress_file(file : UploadFile):
+    with open(f"{file.filename}", "wb") as tarball:
+        tarball.write(file.file.read())
+    with tarfile.open(f"{file.filename}") as tar:
         tar.extractall()
         result_filename = [filename for filename in tar.getnames() if filename.endswith(".mrxs")][0]
     print(result_filename)
