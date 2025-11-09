@@ -1,8 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:atlas_digital_fmabc/services/auth_service.dart'; 
+import 'package:atlas_digital_fmabc/services/auth_service.dart';
+import 'package:go_router/go_router.dart';
 
-/// Formulário de login.
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
@@ -11,55 +11,48 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  late String _email;
-  late String _senha;
-  final AuthService _authService = AuthService(); 
+  String _email = "";
+  String _senha = "";
+  final AuthService _authService = AuthService();
 
-  bool _isLoading = false;      
-  bool _obscurePassword = true; 
-  bool rememberMe = false;      
+  bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool rememberMe = false;
 
-  @override
-  void initState() {
-    _email = "";
-    _senha = "";
-  }
-
-  void _handleLogin() async {
-
+  Future<void> _handleLogin() async {
     if (_email.isEmpty || _senha.isEmpty) {
       _showSnackBar('Por favor, insira seu e-mail e senha.', isError: true);
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    if (!mounted) return;
+    setState(() => _isLoading = true);
 
-    // 3. Call the Backend API
     final String? error = await _authService.login(
       email: _email,
       password: _senha,
     );
 
-
-    setState(() {
-      _isLoading = false;
-    });
-
+    if (!mounted) return;
+    setState(() => _isLoading = false);
 
     if (error == null) {
-      // Login successful!
-      _showSnackBar('Login bem-sucedido!', isError: false);
-      _navigateToHome();
-    } else {
+      // Espera 100ms antes de navegar (corrige o bug do Flutter Web)
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          context.go('/professorArea');
+        }
+      });
 
+      // Mostra feedback visual após o login
+      _showSnackBar('Login bem-sucedido!', isError: false);
+    } else {
       _showSnackBar(error, isError: true);
     }
   }
 
-
   void _showSnackBar(String message, {required bool isError}) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -69,123 +62,85 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _navigateToHome() {
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const Text('Success! Navigate to Home Screen'), 
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final fieldBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.0),
-    );
-
-    final emailField = TextField(
-      onChanged: (valor) => setState(() {
-        _email = valor;
-      }),
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: fieldBorder,
-        labelText: "E-mail",
-        hintText: "E-mail institucional (@fmabc.net)",
-        prefixIcon: Icon(FluentIcons.mail_32_regular),
-      ),
-    );
-
-    final passwordField = TextField(
-      onChanged: (valor) => setState(() {
-        _senha = valor;
-      }),
-      keyboardType: TextInputType.visiblePassword,
-      obscureText: _obscurePassword, 
-      decoration: InputDecoration(
-        border: fieldBorder,
-        labelText: "Senha",
-        hintText: "Senha",
-        prefixIcon: Icon(FluentIcons.key_32_regular),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              _obscurePassword = !_obscurePassword;
-            });
-          },
-          icon: Icon(
-            _obscurePassword 
-                ? FluentIcons.eye_off_32_regular 
-                : FluentIcons.eye_32_regular, 
-          ),
-        ),
-      ),
-    );
-
-    final rememberMeSwitch = SwitchListTile(
-      title: Text("Manter-me conectado"),
-      subtitle: Text(
-        "Salva sua sessão para entrar automaticamente na próxima vez",
-      ),
-      value: rememberMe,
-      onChanged: (value) => setState(() {
-        rememberMe = value;
-      }),
-    );
-
-    final submitButton = Row(
-      children: [
-        Expanded(
-          child: FilledButton.icon(
-            onPressed: _isLoading ? null : _handleLogin,
-            label: _isLoading
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Text("Entrar"),
-            icon: _isLoading ? const SizedBox.shrink() : const Icon(FluentIcons.arrow_enter_20_filled),
-          ),
-        ),
-      ],
-    );
+    final fieldBorder =
+        OutlineInputBorder(borderRadius: BorderRadius.circular(12.0));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Título
-          Text(
-            "Bem-vindo de volta", 
-            style: theme.textTheme.displaySmall,
-            textAlign: TextAlign.center,
+          Text("Bem-vindo de volta",
+              style: theme.textTheme.displaySmall,
+              textAlign: TextAlign.center),
+          const SizedBox(height: 20.0),
+
+          TextField(
+            onChanged: (valor) => setState(() => _email = valor),
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              border: fieldBorder,
+              labelText: "E-mail",
+              hintText: "E-mail institucional (@fmabc.net)",
+              prefixIcon: const Icon(FluentIcons.mail_32_regular),
+            ),
           ),
           const SizedBox(height: 20.0),
 
-          emailField,
-          const SizedBox(height: 20.0),
-          passwordField,
-          
+          TextField(
+            onChanged: (valor) => setState(() => _senha = valor),
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: _obscurePassword,
+            decoration: InputDecoration(
+              border: fieldBorder,
+              labelText: "Senha",
+              hintText: "Senha",
+              prefixIcon: const Icon(FluentIcons.key_32_regular),
+              suffixIcon: IconButton(
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
+                icon: Icon(_obscurePassword
+                    ? FluentIcons.eye_off_32_regular
+                    : FluentIcons.eye_32_regular),
+              ),
+            ),
+          ),
           const SizedBox(height: 10.0),
-          rememberMeSwitch,
-          
+
+          SwitchListTile(
+            title: const Text("Manter-me conectado"),
+            subtitle: const Text(
+                "Salva sua sessão para entrar automaticamente na próxima vez"),
+            value: rememberMe,
+            onChanged: (value) => setState(() => rememberMe = value),
+          ),
           const SizedBox(height: 20.0),
-          submitButton,
+
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: _isLoading ? null : _handleLogin,
+                  label: _isLoading
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2.0, color: Colors.white),
+                        )
+                      : const Text("Entrar"),
+                  icon: _isLoading
+                      ? const SizedBox.shrink()
+                      : const Icon(FluentIcons.arrow_enter_20_filled),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

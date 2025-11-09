@@ -5,6 +5,7 @@ import 'package:atlas_digital_fmabc/screens/imagem_teste/imagem_teste.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
 import 'package:atlas_digital_fmabc/screens/slides/explore_slides_page.dart';
 import 'package:atlas_digital_fmabc/common/widgets/layout/main_layout.dart';
+import 'package:atlas_digital_fmabc/screens/professor_area/professor_area.dart'; // ✅ importa a tela do professor
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,22 +14,26 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "root");
 
 /// Configuração do roteador usando GoRouter.
 final router = GoRouter(
-  navigatorKey: _rootNavigatorKey, // chave do navegador raiz
-  initialLocation: Routes.homePage, // rota inicial
-  // Lista de rotas
+  navigatorKey: _rootNavigatorKey,
+  initialLocation: Routes.homePage,
   routes: [
+    // 🔹 Rota fora das abas — tela do professor
+    GoRoute(
+      path: '/professorArea',
+      builder: (context, state) => const ProfessorArea(),
+    ),
+
+    // 🔹 Estrutura principal com abas
     StatefulShellRoute.indexedStack(
-      // Rota raiz com abas de navegação
       builder: (context, state, navigationShell) =>
           MainLayout(navigationShell: navigationShell),
-      // Definição das abas
       branches: [
         // Início
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: Routes.homePage, // caminho/endpoint
-              builder: (context, state) => const HomePage(), // widget da página
+              path: Routes.homePage,
+              builder: (context, state) => const HomePage(),
             ),
           ],
         ),
@@ -50,12 +55,11 @@ final router = GoRouter(
             ),
           ],
         ),
-        // Menu
+        // Menu e subpáginas
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: Routes.menuPage,
-              // redirecionar pro início
               redirect: (context, state) {
                 if (state.fullPath == Routes.menuPage) {
                   return Routes.homePage;
@@ -69,8 +73,8 @@ final router = GoRouter(
                 ),
                 GoRoute(
                   path: Routes.imagemTeste,
-                  builder: (context, state) => const TesteImagem()
-                )
+                  builder: (context, state) => const TesteImagem(),
+                ),
               ],
             ),
           ],

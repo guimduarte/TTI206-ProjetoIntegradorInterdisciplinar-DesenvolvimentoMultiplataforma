@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfessorArea extends StatefulWidget {
   const ProfessorArea({super.key});
@@ -10,7 +12,23 @@ class ProfessorArea extends StatefulWidget {
 class _ProfessorAreaState extends State<ProfessorArea> {
   final TextEditingController _temaController = TextEditingController();
   final List<String> temas = [];
-  final List<String> imagens = [];
+  final List<File> imagens = [];
+
+  final ImagePicker _picker = ImagePicker();
+
+  // 📸 Função para pegar imagem da galeria ou câmera
+  Future<void> _adicionarImagem() async {
+    final XFile? imagemSelecionada = await _picker.pickImage(
+      source: ImageSource.gallery, // Pode trocar pra .camera se quiser
+      imageQuality: 80, // reduz o tamanho da imagem sem perder muita qualidade
+    );
+
+    if (imagemSelecionada != null) {
+      setState(() {
+        imagens.add(File(imagemSelecionada.path));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +45,55 @@ class _ProfessorAreaState extends State<ProfessorArea> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Botão de Upload de Imagens
+              // Upload de Imagens
               const Text(
                 "Upload de Imagens",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
-                onPressed: () {
-                  // Exemplo de upload de imagem
-                  setState(() {
-                    imagens.add("Imagem ${imagens.length + 1}");
-                  });
-                },
+                onPressed: _adicionarImagem,
                 child: const Text("Adicionar Imagem"),
               ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
-                children:
-                    imagens.map((img) => Chip(label: Text(img))).toList(),
+                runSpacing: 8,
+                children: imagens.map((img) {
+                  return Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          img,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              imagens.remove(img);
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(Icons.close, color: Colors.white, size: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
               ),
 
               const Divider(height: 32),
@@ -100,8 +147,7 @@ class _ProfessorAreaState extends State<ProfessorArea> {
                           String? novoTema = await showDialog(
                             context: context,
                             builder: (context) {
-                              final controller =
-                                  TextEditingController(text: tema);
+                              final controller = TextEditingController(text: tema);
                               return AlertDialog(
                                 title: const Text("Editar Tema"),
                                 content: TextField(controller: controller),
@@ -111,8 +157,8 @@ class _ProfessorAreaState extends State<ProfessorArea> {
                                     child: const Text("Cancelar"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => Navigator.pop(
-                                        context, controller.text),
+                                    onPressed: () =>
+                                        Navigator.pop(context, controller.text),
                                     child: const Text("Salvar"),
                                   ),
                                 ],
