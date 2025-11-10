@@ -1,6 +1,8 @@
 import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 import 'package:atlas_digital_fmabc/data/mock/mock_themes.dart';
+import 'package:atlas_digital_fmabc/models/image_model.dart';
 import 'package:atlas_digital_fmabc/screens/admin/auth/login_page.dart';
+import 'package:atlas_digital_fmabc/screens/exibicao_imagens/exibicao_imagens_page.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:atlas_digital_fmabc/screens/imagem_teste/imagem_teste.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
@@ -40,22 +42,16 @@ final router = GoRouter(
             GoRoute(
               path: Routes.slidesPage,
               builder: (context, state) => ExploreSlidesPage(),
-              
-              // ISSO abaixo foi uma tentativa inútil de usar uma subrota.
-              // Provavelmente eu terei que usar uma subrota para fazer a tela de exibição de imagens
-              // Por isso deixei isso comentado.
-
-              // //Subrota dentro de laminas: 
-              // routes: [
-              //   GoRoute(
-              //     path: 'group/:name',
-              //     builder: (context, state) {
-              //       final groupId = Uri.decodeComponent(state.pathParameters['name']!);
-              //       final group = mockThemes.firstWhere((g) => g.id == groupId);
-              //       return ImageList(listaDeImagens: group.listaDeImagens);
-              //     },
-              //   ),
-              // ],
+              routes: [
+                GoRoute(
+                  path: 'imagem/:imagemId',
+                  builder: (context, state) {
+                    final imagem = state.extra as ImageModel; 
+                    final imageId = state.pathParameters['imagemId']!;
+                    return ExibicaoImagensPage(imagem: imagem);
+                  },
+                ),
+              ],
             ),
           ],
         ),

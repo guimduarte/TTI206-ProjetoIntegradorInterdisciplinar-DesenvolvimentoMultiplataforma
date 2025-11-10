@@ -12,7 +12,7 @@ class TesteImagem extends StatelessWidget {
       appBar: _savedAppBar(context),
       // conteúdo
       body: 
-          SafeArea(child: ImageVisualizer(imageName: "Mirax2.2-4-PNG",))
+          SafeArea(child: ImageVisualizer(imageName: "Mirax2.2-4-PNG.mrxs-tiles",))
       
     );
   }

@@ -1,5 +1,6 @@
 import 'package:atlas_digital_fmabc/models/image_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ImageCard extends StatelessWidget {
   const ImageCard({super.key, required this.imagemDesseCard});
@@ -14,7 +15,7 @@ class ImageCard extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () {
-          // TODO: abrir página da imagem
+          context.go('/laminas/imagem/${imagemDesseCard.id}', extra: imagemDesseCard);
         },
         child: 
         Padding(
