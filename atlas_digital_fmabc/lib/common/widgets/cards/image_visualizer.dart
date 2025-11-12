@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 const minZoom = 0.5;
 const maxZoom = 1000.0;
@@ -8,15 +9,18 @@ const apiUrl = String.fromEnvironment("apiUrl", defaultValue: "");
 class ImageVisualizer extends StatefulWidget {
   const ImageVisualizer({
       super.key,
-      required this.imageName
+      required this.imageName,
+      required this.espelhado,
   });
   final String imageName;
+  final bool espelhado;
   @override
   ImageVisualizerState createState() => ImageVisualizerState();
 }
 
 class ImageVisualizerState extends State<ImageVisualizer> {
   final mapController = MapController();
+  bool espelhado = false;
 
   @override
   void initState() {
@@ -46,8 +50,9 @@ class ImageVisualizerState extends State<ImageVisualizer> {
                 minZoom: 1,
                 tileDimension: 256,
               ),
-              MarkerLayer(markers: [
-                  
+              MarkerLayer(
+                markers: [
+                
                 ],
               ),
             ],
