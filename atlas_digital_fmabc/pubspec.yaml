@@ -17,6 +17,7 @@ dependencies:
   flutter_map: ^8.2.2
   flutter_native_splash: ^2.4.7
   file_selector: ^1.0.4
+  tar: ^2.0.1
 
 dev_dependencies:
   flutter_test:
