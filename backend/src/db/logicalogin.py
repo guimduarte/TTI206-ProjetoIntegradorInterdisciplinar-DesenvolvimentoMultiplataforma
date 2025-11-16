@@ -39,18 +39,26 @@ def get_current_user(token: str, db):
         return None
     return usuario
 
-def cadastro_professor(db, email,nome,senha):
+DOMINIO_PERMITIDO = "@fmabc.net"
+
+def cadastro_professor(db, email,nome,senha,user_type):
+    if not email.endswith(DOMINIO_PERMITIDO):
+        return{"message": f"Erro: O Cadastro é permitido apenas para o domínio {DOMINIO_PERMITIDO}.", "error": True}
+    
     if db.usuario.find_one({'email':email}):
-        return "Erro: Esse email já foi utilizado para cadastro"
+        return {"message": "Erro: Esse email já foi utilizado para cadastro", "error":True}
+    
+    if user_type not in ['admin', 'professor']:
+        return {"message": "Erro: Tipo de usuário inválido.", "error": True}
     
     novo_usuario = {
         'nome': nome,
         'email': email,
         'senha': get_password_hash(senha),
-        'tipo':'professor'
+        'tipo':user_type
     }
     db.usuario.insert_one(novo_usuario)
-    return "Professor registrado"
+    return{"message":"Usuário Registrado com sucesso", "success": True}
 
 def autenticar_professor(db, email,senha):
     usuario = db.usuario.find_one({'email':email})
@@ -58,4 +66,15 @@ def autenticar_professor(db, email,senha):
         is_admin = usuario["tipo"] == 'admin'
         return create_access_token({"admin" : is_admin, "nome" : usuario["nome"], "email" : usuario["email"]}), is_admin
     return None, None
+
+def deletar_professor(db, email):
+    usuario = db.usuario.find_one({'email': email})
+    if usuario and usuario.get('tipo') == 'admin':
+        return{"message": "Erro: não é permitido deletar administradores", "error":True}
+    resultado = db.usuario.delete_one({'email':email, 'tipo': {'$ne':'admin'}})
+    
+    if resultado.deleted_count == 1:
+        return{"message": f"Usuario {email} deletado com sucesso.", "success": True}
+    else:
+        return{"message": f"Erro: Usuario {email} não encontrado ou não permitido deletar", "error": True}
         
