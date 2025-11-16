@@ -5,13 +5,13 @@ from fastapi import FastAPI, HTTPException, Path, Request, Response, UploadFile,
 import json
 from dotenv import dotenv_values
 import tempfile
-import tarfile
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
 from src.db.image import ImageDB
 from pymongo import MongoClient
 from src.image import generate_image, decompress_file, generate_thumbnail
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
-from src.db.logicalogin import cadastro_professor, autenticar_professor
+from src.db.logicalogin import cadastro_professor, autenticar_professor,deletar_professor
 
 config = dotenv_values(".env")
 
@@ -78,20 +78,28 @@ async def get_categories():
 @app.post('/register')
 async def register(request: Request):
     data = await request.json()
-    email_professor = data.get('email_professor')
-    nome = data.get('nome_professor')
+    email = data.get('email')
+    nome = data.get('nome')
     senha = data.get('senha')
+    tipo = data.get('tipo')
 
-    if not email_professor or not senha or not nome:
-        return {'success': False, 'message': 'Email, nome e senha são obrigatórios.'}
+    if not email or not senha or not nome or not tipo:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail='Email, nome, senha e tipo são obrigatórios.'
+        )
 
-    mensagem = cadastro_professor(app.database, email_professor,nome, senha)
-    if "sucesso" in mensagem.lower():
-        return {'success': True, 'message': mensagem}
+    resultado_cadastro = cadastro_professor(app.database, email, nome, senha, tipo)
+    
+    if resultado_cadastro.get("success"):
+        return {'message': resultado_cadastro.get("message")} 
     else:
-        return {'success': False, 'message': mensagem}
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail=resultado_cadastro.get("message", "Erro desconhecido durante o cadastro.")
+        )
 
-@app.post('/login')
+@app.post('/login', status_code=status.HTTP_200_OK)
 async def login(request: Request):
     data = await request.json()
     print(data)
@@ -103,12 +111,36 @@ async def login(request: Request):
 
     if not email_professor or not senha:
         print("Erro: Email e senha são obrigatórios.")
-        return {'success': False, 'message': 'Email e senha são obrigatórios.'}
+        raise HTTPException(status_code= HTTP_406_NOT_ACCEPTABLE, detail='Email e senha são obrigatórios.')
 
-    senha_correta, is_admin = autenticar_professor(app.database,email_professor, senha)
-    if senha_correta:
-        print(f"Login bem-sucedido para: {email_professor}, isAdmin: {is_admin}")
-        return {'success': True, 'message': 'Login realizado com sucesso!', 'numero_cliente': email_professor, 'is_admin': is_admin}
+    token, is_admin = autenticar_professor(app.database,email_professor, senha)
+    if token is not None:
+        print(f"Login bem-sucedido para: {email_professor}")
+        return {'token': token, "is_admin" : is_admin}
     else:
         print(f"Falha no login para: {email_professor}")
-        return {'success': False, 'message': 'Credenciais inválidas.'}
+        raise HTTPException(status_code= HTTP_401_UNAUTHORIZED ,detail='Credenciais inválidas.')
+    
+@app.get('/users', status_code=status.HTTP_200_OK)
+async def list_users():
+    try:
+        usuarios_cursor = app.database["usuario"].find({}, {"_id": 0, "senha": 0}) 
+        usuarios_list = list(usuarios_cursor)
+        return usuarios_list
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail=f"Erro ao buscar usuários no banco de dados: {str(e)}"
+        )
+        
+@app.delete('/users/{email}')
+async def delete_user(email:str):
+    resultado_delecao = deletar_professor(app.database, email)
+    
+    if resultado_delecao.get("success"):
+        return{"message": resultado_delecao.get("message")}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail=resultado_delecao.get("message", "Erro desconhecido na deleção.")
+        )   

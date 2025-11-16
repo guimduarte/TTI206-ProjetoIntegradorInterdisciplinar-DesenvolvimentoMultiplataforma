@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:atlas_digital_fmabc/services/auth_service.dart'; 
+import 'package:atlas_digital_fmabc/services/auth_service.dart';
+import 'package:go_router/go_router.dart';
 
 /// Formulário de login.
 class LoginForm extends StatefulWidget {
@@ -13,11 +14,11 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   late String _email;
   late String _senha;
-  final AuthService _authService = AuthService(); 
+  final AuthService _authService = AuthService();
 
-  bool _isLoading = false;      
-  bool _obscurePassword = true; 
-  bool rememberMe = false;      
+  bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool rememberMe = false;
 
   @override
   void initState() {
@@ -25,8 +26,7 @@ class _LoginFormState extends State<LoginForm> {
     _senha = "";
   }
 
-  void _handleLogin() async {
-
+  void _handleLogin(BuildContext context) async {
     if (_email.isEmpty || _senha.isEmpty) {
       _showSnackBar('Por favor, insira seu e-mail e senha.', isError: true);
       return;
@@ -37,27 +37,23 @@ class _LoginFormState extends State<LoginForm> {
     });
 
     // 3. Call the Backend API
-    final String? error = await _authService.login(
+    final Map<String, dynamic> resultado = await _authService.login(
       email: _email,
       password: _senha,
     );
-
 
     setState(() {
       _isLoading = false;
     });
 
-
-    if (error == null) {
+    if (!resultado.containsKey('error')) {
       // Login successful!
       _showSnackBar('Login bem-sucedido!', isError: false);
-      _navigateToHome();
+      _navigateToPage(context, resultado["is_admin"]!);
     } else {
-
-      _showSnackBar(error, isError: true);
+      _showSnackBar(resultado['error']!, isError: true);
     }
   }
-
 
   void _showSnackBar(String message, {required bool isError}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -69,13 +65,12 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _navigateToHome() {
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const Text('Success! Navigate to Home Screen'), 
-      ),
-    );
+  void _navigateToPage(BuildContext context, bool isAdmin) {
+    if (isAdmin) {
+      context.go("/admin");
+    } else {
+      context.go("/professor");
+    }
   }
 
   @override
@@ -104,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
         _senha = valor;
       }),
       keyboardType: TextInputType.visiblePassword,
-      obscureText: _obscurePassword, 
+      obscureText: _obscurePassword,
       decoration: InputDecoration(
         border: fieldBorder,
         labelText: "Senha",
@@ -117,9 +112,9 @@ class _LoginFormState extends State<LoginForm> {
             });
           },
           icon: Icon(
-            _obscurePassword 
-                ? FluentIcons.eye_off_32_regular 
-                : FluentIcons.eye_32_regular, 
+            _obscurePassword
+                ? FluentIcons.eye_off_32_regular
+                : FluentIcons.eye_32_regular,
           ),
         ),
       ),
@@ -140,7 +135,7 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         Expanded(
           child: FilledButton.icon(
-            onPressed: _isLoading ? null : _handleLogin,
+            onPressed: () => _isLoading ? null : _handleLogin(context),
             label: _isLoading
                 ? const SizedBox(
                     width: 16,
@@ -151,7 +146,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   )
                 : const Text("Entrar"),
-            icon: _isLoading ? const SizedBox.shrink() : const Icon(FluentIcons.arrow_enter_20_filled),
+            icon: _isLoading
+                ? const SizedBox.shrink()
+                : const Icon(FluentIcons.arrow_enter_20_filled),
           ),
         ),
       ],
@@ -164,7 +161,7 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           // Título
           Text(
-            "Bem-vindo de volta", 
+            "Bem-vindo de volta",
             style: theme.textTheme.displaySmall,
             textAlign: TextAlign.center,
           ),
@@ -173,10 +170,10 @@ class _LoginFormState extends State<LoginForm> {
           emailField,
           const SizedBox(height: 20.0),
           passwordField,
-          
+
           const SizedBox(height: 10.0),
           rememberMeSwitch,
-          
+
           const SizedBox(height: 20.0),
           submitButton,
         ],

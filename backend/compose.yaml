@@ -10,7 +10,7 @@ services:
   database:
     image: mongodb/mongodb-community-server
     ports:
-      - "27017:27017"
+      - "27016:27017"
     volumes:
       - db-data:/data/db
     networks:
