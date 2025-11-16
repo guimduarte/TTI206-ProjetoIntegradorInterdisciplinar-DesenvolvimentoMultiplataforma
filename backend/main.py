@@ -5,7 +5,6 @@ from fastapi import FastAPI, HTTPException, Path, Request, Response, UploadFile,
 import json
 from dotenv import dotenv_values
 import tempfile
-
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
 from src.db.image import ImageDB
 from pymongo import MongoClient
@@ -71,6 +70,10 @@ async def get_thumbnail(image_name : Annotated[str, Path()]):
         return None
     return Response(file)
 
+
+@app.get("/categories")
+async def get_categories():
+    pass
 
 @app.post('/register')
 async def register(request: Request):
