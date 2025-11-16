@@ -1,3 +1,4 @@
+import 'package:atlas_digital_fmabc/common/widgets/upload/upload_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfessorArea extends StatefulWidget {
@@ -10,7 +11,6 @@ class ProfessorArea extends StatefulWidget {
 class _ProfessorAreaState extends State<ProfessorArea> {
   final TextEditingController _temaController = TextEditingController();
   final List<String> temas = [];
-  final List<String> imagens = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +33,7 @@ class _ProfessorAreaState extends State<ProfessorArea> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () {
-                  // Exemplo de upload de imagem
-                  setState(() {
-                    imagens.add("Imagem ${imagens.length + 1}");
-                  });
-                },
-                child: const Text("Adicionar Imagem"),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children:
-                    imagens.map((img) => Chip(label: Text(img))).toList(),
-              ),
-
+              UploadImage(),
               const Divider(height: 32),
 
               // Criação de Temas
