@@ -2,11 +2,13 @@ import 'package:atlas_digital_fmabc/models/groups/group_model.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
+
 /// Card de tema.
 class GroupCard extends StatelessWidget {
-  const GroupCard({super.key, required this.group});
+  const GroupCard({super.key, required this.group, required this.onTap});
 
   final GroupModel group;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,10 @@ class GroupCard extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () {
-          // TODO: abrir página do grupo
+          onTap();
         },
-        child: Padding(
+        child: 
+        Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
