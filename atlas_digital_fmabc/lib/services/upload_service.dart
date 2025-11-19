@@ -11,8 +11,8 @@ class UploadService {
     final url = Uri.parse('$_baseUrl/image');
     final request = http.MultipartRequest("POST", url);
     request.files.add(await http.MultipartFile.fromPath("file", tarPath));
-    request.fields["imageName"] = imageName;
-    request.fields["imageDescription"] = imageDescription;
+    request.fields["image_name"] = imageName;
+    request.fields["image_description"] = imageDescription;
     try {
       var response = await request.send();
       if (response.statusCode == 200) print('Uploaded!');

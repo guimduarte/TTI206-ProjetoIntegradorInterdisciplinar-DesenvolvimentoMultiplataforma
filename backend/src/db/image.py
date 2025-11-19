@@ -30,11 +30,12 @@ class ImageDB:
                         self.db.insert_one(item)
         print("enviado")
         
-    def save_thumbnail(self, image_bytes : bytes):
+    def save_thumbnail(self, image_bytes : bytes, image_description : str):
         base64_bytes = base64.b64encode(image_bytes)
         data = base64_bytes.decode("ascii")
         image = {
             "image_name" : self.image_name,
+            "image_description" : image_description,
             "thumbnail" : data
         }
         self.db.insert_one(image)

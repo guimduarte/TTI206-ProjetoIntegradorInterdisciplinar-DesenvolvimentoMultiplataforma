@@ -30,7 +30,6 @@ def decompress_file(file : UploadFile):
 
 def generate_thumbnail(filename : str):
     slide = openslide.OpenSlide(filename)
-    print(slide.properties)
     slide_image = pyvips.Image.openslideload(f"{filename}", autocrop = True)
     numpy_array = slide_image.numpy()
     image = fromarray(numpy_array)

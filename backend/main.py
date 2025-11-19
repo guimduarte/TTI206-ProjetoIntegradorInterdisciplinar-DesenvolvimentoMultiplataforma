@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from os import stat
 from typing import Annotated
-from fastapi import FastAPI, HTTPException, Path, Request, Response, UploadFile, status
+from fastapi import FastAPI, Form, HTTPException, Path, Request, Response, UploadFile, status
 import json
 from dotenv import dotenv_values
 import tempfile
@@ -41,15 +41,15 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/image", status_code=status.HTTP_201_CREATED)
-async def upload_image(file: UploadFile):
+async def upload_image(file: UploadFile, image_name : str = Form(), image_description : str = Form()):
     image_directory = decompress_file(file)
     filename = generate_image(image_directory)
     if not filename:
         raise HTTPException(status_code=status.HTTP_412_PRECONDITION_FAILED, detail="Houve um erro ao tentar criar a imagem")
-    imagedb = ImageDB(filename.split("/")[0], getDatabase(ImageDB.collection_name))
+    imagedb = ImageDB(image_name, getDatabase(ImageDB.collection_name))
     imagedb.save_image(filename)
     imagedb.db = getDatabase("image_info")
-    imagedb.save_thumbnail(generate_thumbnail(image_directory))
+    imagedb.save_thumbnail(generate_thumbnail(image_directory), image_description)
     return {"message" : "sucesso"}
 
 
