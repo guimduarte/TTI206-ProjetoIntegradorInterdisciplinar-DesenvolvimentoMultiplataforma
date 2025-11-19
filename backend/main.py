@@ -6,6 +6,8 @@ import json
 from dotenv import dotenv_values
 import tempfile
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
+from src.db import category
+from src.db.category import CategoryDB
 from src.db.image import ImageDB
 from pymongo import MongoClient
 from src.image import generate_image, decompress_file, generate_thumbnail
@@ -73,8 +75,19 @@ async def get_thumbnail(image_name : Annotated[str, Path()]):
 
 @app.get("/categories")
 async def get_categories():
-    pass
+    categorydb = CategoryDB(getDatabase(CategoryDB.collection_name))
+    categories = categorydb.get_categories()
+    return {"categorias" : categories}
 
+@app.post("/category")
+async def create_category(request : Request):
+    categorydb = CategoryDB(getDatabase(CategoryDB.collection_name))
+    data = await request.json()
+    category_name = data.get("category_name")
+    images = data.get("images")
+    categorydb.create_category(category_name, images)
+    return {"message" : "sucesso"}
+    
 @app.post('/register')
 async def register(request: Request):
     data = await request.json()

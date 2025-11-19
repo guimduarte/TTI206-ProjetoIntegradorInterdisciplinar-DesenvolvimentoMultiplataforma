@@ -8,7 +8,13 @@ class CategoryDB:
         self.db = db
 
     def get_categories(self):
-        return self.db.find()
+        cursor = self.db.find({})
+        categories = []
+        for category in cursor:
+            category["_id"] = str(category["_id"])
+            categories.append(category)
+        cursor.close()
+        return categories
 
     def create_category(self, category_name : str, images : List[str]):
         item = {
@@ -55,7 +61,7 @@ class CategoryDB:
                 "as" : "image_info"
             },
             "$project" : {
-                "_id" : 0,
+                "_id" : 1,
                 "image_info.image_name" : 1
             }
         })
