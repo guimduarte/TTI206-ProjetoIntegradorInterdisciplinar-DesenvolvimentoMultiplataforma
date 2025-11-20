@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:atlas_digital_fmabc/widgets/form/cadastro_form.dart';
 import 'package:atlas_digital_fmabc/services/auth_service.dart';
+import 'package:atlas_digital_fmabc/services/category_service.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -13,12 +14,13 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   final AuthService _authService = AuthService();
+  final CategoryService _categoryService = CategoryService();
 
   final TextEditingController _temaController = TextEditingController();
-  final List<String> temas = [];
+  List<Map<String, dynamic>> categorias = [];
+  List<String> imagensDisponiveis = [];
   final List<String> imagens = [];
 
-  // VARIÁVEIS PARA CARREGAR DADOS DO BACKEND
   List<Map<String, dynamic>> usuarios = [];
   bool _isLoading = true;
 
@@ -26,6 +28,89 @@ class _AdminPageState extends State<AdminPage> {
   void initState() {
     super.initState();
     _fetchProfessores();
+    _fetchCategorias();
+    _fetchImagensDisponiveis();
+  }
+
+  Future<void> _fetchImagensDisponiveis() async {
+    final resultado = await _categoryService.fetchAvailableImages();
+    if (resultado.containsKey("success")) {
+      setState(() {
+        imagensDisponiveis = List<String>.from(resultado["data"]);
+      });
+    } else {
+      print(
+        "Aviso: Não foi possível carregar a lista de imagens para tagging.",
+      );
+    }
+  }
+
+  Future<void> _fetchCategorias() async {
+    final resultado = await _categoryService.fetchCategories();
+    if (resultado.containsKey("success")) {
+      setState(() {
+        categorias = (resultado["data"] as List)
+            .map((item) => item as Map<String, dynamic>)
+            .toList();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(resultado["message"]),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleCreateCategory() async {
+    final newName = _temaController.text.trim();
+    if (newName.isEmpty) return;
+
+    final resultado = await _categoryService.createCategory(
+      categoryName: newName,
+    );
+
+    if (resultado.containsKey("success")) {
+      _temaController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(resultado["message"]),
+          backgroundColor: Colors.green.shade700,
+        ),
+      );
+      await _fetchCategorias();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(resultado["message"]),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleDeleteCategory(String categoryName) async {
+    final resultado = await _categoryService.deleteCategory(
+      categoryName: categoryName,
+    );
+
+    if (resultado.containsKey("success")) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(resultado["message"]),
+          backgroundColor: Colors.green.shade700,
+        ),
+      );
+      await _fetchCategorias();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(resultado["message"]),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
   }
 
   Future<void> _fetchProfessores() async {
@@ -61,7 +146,7 @@ class _AdminPageState extends State<AdminPage> {
       usuarios = [
         {
           'nome': 'Erro de Rede',
-          'email': 'Não foi possível conectar a localhost:8000/users',
+          'email': 'Não foi possível conectar',
           'is_admin': true,
         },
       ];
@@ -102,35 +187,95 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  // Método para isolar a lógica do diálogo de edição de temas
-  void _showEditDialog(int index, String tema) async {
-    String? novoTema = await showDialog<String>(
+  // Método para isolar a lógica do diálogo de edição de categorias
+  void _showEditDialog(String oldName, String currentName) async {
+    final categoriaExistente = categorias.firstWhere(
+      (cat) => cat["category_name"] == oldName,
+      orElse: () => {"images": []} as Map<String, dynamic>,
+    );
+    Set<String> imagensSelecionadas = Set.from(
+      categoriaExistente["images"]?.cast<String>() ?? [],
+    );
+    final result = await showDialog<Map<String,dynamic>>(
       context: context,
       builder: (context) {
-        final controller = TextEditingController(text: tema);
-        return AlertDialog(
-          title: const Text("Editar Tema"),
-          content: TextField(controller: controller),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: const Text("Salvar"),
-            ),
-          ],
+        final controller = TextEditingController(text: currentName);
+        return StatefulBuilder(
+          builder: (BuildContext context,
+          StateSetter setStateDialog){
+            return AlertDialog(
+              title: const Text("Editar Categoria"),
+              content: SizedBox(
+                width: MediaQuery.of
+                (context).size.width * 0.9,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Nome da Categoria:", style: TextStyle(fontWeight:FontWeight.bold)),
+                      TextField(controller: controller),
+                      const SizedBox(height: 15),
+                      const Text("Imagens Associadas:", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ...imagensDisponiveis.map((imgName) {
+                          return CheckboxListTile(
+                              dense: true,
+                              title: Text(imgName, style: const TextStyle(fontSize: 14)),
+                                value: imagensSelecionadas.contains(imgName),
+                                onChanged: (bool? newValue) {
+                                  setStateDialog(() { 
+                                    if (newValue == true) {
+                                        imagensSelecionadas.add(imgName);
+                                    } else {
+                                        imagensSelecionadas.remove(imgName);
+                                    }
+                                 });
+                               },
+                             );
+                            }).toList(),
+                          ],
+                        ),
+                     ),
+                    ),
+                    actions: [
+                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
+                        ElevatedButton(
+                            onPressed: () => Navigator.pop(context, {
+                                'new_name': controller.text.trim(),
+                                'new_images': imagensSelecionadas.toList(),
+                            }),
+                            child: const Text("Salvar"),
+                        ),
+                    ],
+                );
+            }
         );
       },
-    );
-    if (novoTema != null && novoTema.isNotEmpty && novoTema != tema) {
-      setState(() {
-        temas[index] = novoTema;
-      });
+   );
+
+    if (result != null && result is Map) {
+        final newName = result['new_name'];
+        final newImages = result['new_images'];
+        
+        if (newName.isNotEmpty && (newName != currentName || newImages != (categoriaExistente["images"] ?? []))) {
+          final resultado = await _categoryService.updateCategory(
+            oldName: oldName,
+            newName: newName,
+            newImages: newImages.cast<String>(),
+            );
+
+            if (resultado.containsKey("success")) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.green.shade700)
+                );
+                await _fetchCategorias(); // Recarrega para mostrar o novo nome e as tags
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.red.shade700)
+        );
+      }
     }
   }
-
+}
   @override
   void dispose() {
     _temaController.dispose();
@@ -154,13 +299,13 @@ class _AdminPageState extends State<AdminPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SEÇÃO DE CADASTRO
+              //CADASTRO
               _buildSectionCard(
                 title: "Cadastro de Novos Usuários",
                 children: [CadastroForm(onCadastroSuccess: _fetchProfessores)],
               ),
 
-              // SEÇÃO: Lista de usuarios
+              //Lista de usuarios
               _buildSectionCard(
                 title: "Professores Cadastrados ($totalUsers)",
                 children: [
@@ -184,19 +329,27 @@ class _AdminPageState extends State<AdminPage> {
                               contentPadding: EdgeInsets.zero,
                               leading: Icon(
                                 isAdmin ? Icons.security : Icons.school,
-                                color: isAdmin ? Colors.deepOrange : Colors.blueGrey,
+                                color: isAdmin
+                                    ? Colors.deepOrange
+                                    : Colors.blueGrey,
                               ),
                               title: Text(user['nome']!),
                               subtitle: Text(userEmail),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Chip 
+                                  // Chip
                                   Chip(
-                                    label: Text(isAdmin ? "Admin":"Professor"),
-                                    backgroundColor: isAdmin ? Colors.deepOrange.shade100 : Colors.blue.shade100,
+                                    label: Text(
+                                      isAdmin ? "Admin" : "Professor",
+                                    ),
+                                    backgroundColor: isAdmin
+                                        ? Colors.deepOrange.shade100
+                                        : Colors.blue.shade100,
                                     labelStyle: TextStyle(
-                                      color: isAdmin ? Colors.deepOrange.shade900 : Colors.blue.shade900,
+                                      color: isAdmin
+                                          ? Colors.deepOrange.shade900
+                                          : Colors.blue.shade900,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 10,
                                     ),
@@ -207,46 +360,52 @@ class _AdminPageState extends State<AdminPage> {
                                   IconButton(
                                     icon: Icon(
                                       Icons.delete,
-                                      color: isAdmin?Colors.grey:Colors.red,
+                                      color: isAdmin ? Colors.grey : Colors.red,
                                     ),
-                                    onPressed: isAdmin ? null : () async {
-                                      setState(() {
-                                        _isLoading = true;
-                                      });
-                                      final resultado = await _authService
-                                          .deleteUser(email: userEmail);
+                                    onPressed: isAdmin
+                                        ? null
+                                        : () async {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            final resultado = await _authService
+                                                .deleteUser(email: userEmail);
 
-                                      if (resultado.containsKey('success')) {
-                                        // SnackBar de sucesso
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(resultado['message']),
-                                            backgroundColor:
-                                                Colors.green.shade700,
-                                          ),
-                                        );
-                                        await _fetchProfessores();
-                                      } else {
-                                        // SnackBar de erro
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              resultado['message'] ??
-                                                  'Erro desconhecido na deleção.',
-                                            ),
-                                            backgroundColor:
-                                                Colors.red.shade700,
-                                          ),
-                                        );
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                      }
-                                    },
+                                            if (resultado.containsKey(
+                                              'success',
+                                            )) {
+                                              // SnackBar de sucesso
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    resultado['message'],
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.green.shade700,
+                                                ),
+                                              );
+                                              await _fetchProfessores();
+                                            } else {
+                                              // SnackBar de erro
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    resultado['message'] ??
+                                                        'Erro desconhecido na deleção.',
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.red.shade700,
+                                                ),
+                                              );
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                            }
+                                          },
                                   ),
                                 ],
                               ),
@@ -296,32 +455,24 @@ class _AdminPageState extends State<AdminPage> {
                 ],
               ),
 
-              //  SEÇÃO: Criação de Temas
+              // Criação de Categorias
               _buildSectionCard(
                 title: "Criação de Temas",
                 children: [
                   TextField(
                     controller: _temaController,
                     decoration: const InputDecoration(
-                      labelText: "Nome do Tema",
+                      labelText: "Nome da Categoria",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      hintText: "Ex: Natureza, Cidades, Arte",
+                      hintText: "Ex: Célula 1, Célula 2, Guigo",
                     ),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      if (_temaController.text.isNotEmpty &&
-                          !temas.contains(_temaController.text.trim())) {
-                        setState(() {
-                          temas.add(_temaController.text.trim());
-                          _temaController.clear();
-                        });
-                      }
-                    },
-                    child: const Text("Criar Tema"),
+                    onPressed: _handleCreateCategory,
+                    child: const Text("Criar Categoria"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       foregroundColor: Theme.of(
@@ -336,10 +487,10 @@ class _AdminPageState extends State<AdminPage> {
                 ],
               ),
 
-              // SEÇÃO: Edição/Lista de Temas
+              // Lista de Categorias
               _buildSectionCard(
-                title: "Temas Criados",
-                children: temas.isEmpty
+                title: "Categorias Criadas (${categorias.length})",
+                children: categorias.isEmpty
                     ? [
                         const Center(
                           child: Padding(
@@ -348,14 +499,19 @@ class _AdminPageState extends State<AdminPage> {
                           ),
                         ),
                       ]
-                    : temas.asMap().entries.map((entry) {
+                    : categorias.asMap().entries.map((entry) {
                         int index = entry.key;
-                        String tema = entry.value;
+                        final category = entry.value;
+                        final categoryName =
+                            category["category_name"] as String;
                         return Column(
                           children: [
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text(tema),
+                              title: Text(categoryName),
+                              subtitle: Text(
+                                'Imagens Associadas: ${category["images"]?.length ?? 0}',
+                              ),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -364,19 +520,18 @@ class _AdminPageState extends State<AdminPage> {
                                       Icons.edit,
                                       color: Colors.blue,
                                     ),
-                                    onPressed: () =>
-                                        _showEditDialog(index, tema),
+                                    onPressed: () => _showEditDialog(
+                                      categoryName,
+                                      categoryName,
+                                    ),
                                   ),
                                   IconButton(
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        temas.removeAt(index);
-                                      });
-                                    },
+                                    onPressed: () =>
+                                        _handleDeleteCategory(categoryName),
                                   ),
                                 ],
                               ),

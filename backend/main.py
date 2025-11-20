@@ -12,6 +12,7 @@ from src.image import generate_image, decompress_file, generate_thumbnail
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from src.db.logicalogin import cadastro_professor, autenticar_professor,deletar_professor
+from src.db.category import CategoryDB
 
 config = dotenv_values(".env")
 
@@ -144,3 +145,94 @@ async def delete_user(email:str):
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail=resultado_delecao.get("message", "Erro desconhecido na deleção.")
         )   
+        
+# categorias
+@app.get('/categories', status_code = status.HTTP_200_OK)
+async def list_categories():
+    try:
+        category_db = CategoryDB(app.database[CategoryDB.collection_name])
+        category_cursor = category_db.get_categories()
+        categories_list = []
+        for cat in category_cursor:
+            cat['_id'] = str(cat["_id"])
+            categories_list.append(cat)
+        return categories_list
+    except Exception as e:
+        raise HTTPException(
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail = f'Erro ao buscar categorias: {str(e)}'
+        )
+
+@app.post('/categories', status_code = status.HTTP_201_CREATED)
+async def create_category(request: Request):
+    data = await request.json()
+    category_name = data.get('category_name')
+    images = data.get('images', [])
+    
+    if not category_name:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="O nome da categoria é obrigatório.")   
+    try:
+        category_db = CategoryDB(app.database[CategoryDB.collection_name])
+        if category_db.db.find_one({"category_name": category_name}):
+            raise HTTPException(status_code = status.HTTP_409_CONFLICT, detail='Categoria ja existe')
+        category_db.create_category(category_name, images)
+        return {"message": f"Categoria '{category_name}' criada com sucesso."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro ao criar categoria: {str(e)}")
+    
+@app.delete('/categories/{category_name}', status_code=status.HTTP_200_OK)
+async def delete_category_endpoint(category_name: str):
+    try:
+        category_db = CategoryDB(app.database[CategoryDB.collection_name])
+        if not category_db.db.find_one({"category_name": category_name}):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Categoria não encontrada.")
+            
+        category_db.delete_category(category_name)
+        return {"message": f"Categoria '{category_name}' deletada com sucesso."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro ao deletar categoria: {str(e)}")
+
+@app.put('/categories/{category_name}', status_code=status.HTTP_200_OK)
+async def update_category_endpoint(category_name: str, request: Request):
+    data = await request.json()
+    new_name = data.get('new_name')
+    new_images = data.get('new_images') # Pode ser None ou uma lista de strings
+    if new_name is None and new_images is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Pelo menos 'new_name' ou 'new_images' deve ser fornecido para a atualização."
+        )
+    try:
+        category_db = CategoryDB(app.database[CategoryDB.collection_name])
+        if not category_db.db.find_one({"category_name": category_name}):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Categoria original não encontrada.")
+
+        if new_name and new_name != category_name and category_db.db.find_one({"category_name": new_name}):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"O novo nome '{new_name}' já está em uso.")
+
+        category_db.update_category(category_name, new_name, new_images)        
+        return {"message": f"Categoria '{category_name}' atualizada com sucesso."}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro ao atualizar categoria: {str(e)}")
+                                 
+# coloquei mais um de imagem-gui
+@app.get ("/images_list", status_code=status.HTTP_200_OK)
+async def list_available_images():
+    try:
+        image_info_collection = app.database["image_info"] 
+        images_cursor = image_info_collection.find({}, {"_id": 0, "image_name": 1})
+        images_list = [img['image_name'] for img in images_cursor]
+        return {"images": list(set(images_list))} 
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro ao listar imagens: {str(e)}"
+        )
+
