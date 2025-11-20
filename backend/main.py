@@ -74,20 +74,11 @@ async def get_thumbnail(image_name : Annotated[str, Path()]):
     return Response(file)
 
 
-@app.get("/categories")
+@app.get("/categories-images")
 async def get_categories():
     categorydb = CategoryDB(getDatabase(CategoryDB.collection_name))
     categories = categorydb.get_category_images()
     return {"categories" : categories}
-
-@app.post("/category")
-async def create_category(request : Request):
-    categorydb = CategoryDB(getDatabase(CategoryDB.collection_name))
-    data = await request.json()
-    category_name = data.get("category_name")
-    images = data.get("images")
-    categorydb.create_category(category_name, images)
-    return {"message" : "sucesso"}
     
 @app.post('/register')
 async def register(request: Request):
