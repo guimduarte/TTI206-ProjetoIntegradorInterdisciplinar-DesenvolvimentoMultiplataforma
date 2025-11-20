@@ -8,7 +8,13 @@ class CategoryDB:
         self.db = db
 
     def get_categories(self):
-        return self.db.find()
+        cursor = self.db.find({})
+        categories = []
+        for category in cursor:
+            category["_id"] = str(category["_id"])
+            categories.append(category)
+        cursor.close()
+        return categories
 
     def create_category(self, category_name : str, images : List[str]):
         item = {
@@ -42,20 +48,38 @@ class CategoryDB:
         self.db.delete_one({"category_name" : category_name})
         print("categoria deletada")
 
-    def get_category_images(self, category_name : str):
-        return self.db.aggregate({
-            "$match" : {
-                "category_name" : category_name
-            },
+    def get_category_images(self):
+        cursor = self.db.aggregate([{
             "$unwind" : "$images",
+        },
+        {
             "$lookup" : {
-                "from" : "images",
-                "localField" : "image_info",
+                "from" : "image_info",
+                "localField" : "images",
                 "foreignField" : "image_name",
                 "as" : "image_info"
             },
-            "$project" : {
-                "_id" : 0,
-                "image_info.image_name" : 1
+        },
+                       {"$unwind" : "$image_info"},
+        {
+            "$group" : {
+                "_id" : {
+                  "$toString" : "$_id"
+                  },
+                "category_name" : {
+                    "$first" : "$category_name"
+                },
+                "images" : {
+                    "$push" : {
+                      "_id" : {"$toString" : "$image_info._id"},
+                      "image_name" : "$image_info.image_name",
+                      "image_description" : "$image_info.image_description",
+                      "thumbnail" : "$image_info.thumbnail"
+                    }
+                }
             }
-        })
+        },
+        ])
+        categories = list(cursor)
+        cursor.close()
+        return categories

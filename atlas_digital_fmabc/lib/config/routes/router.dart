@@ -1,12 +1,16 @@
 import 'package:atlas_digital_fmabc/config/routes/routes.dart';
+import 'package:atlas_digital_fmabc/data/mock/mock_themes.dart';
+import 'package:atlas_digital_fmabc/models/image_model.dart';
 import 'package:atlas_digital_fmabc/screens/admin/auth/login_page.dart';
 import 'package:atlas_digital_fmabc/screens/admin/professor_page.dart';
 import 'package:atlas_digital_fmabc/screens/admin/admin_page.dart';
+import 'package:atlas_digital_fmabc/screens/exibicao_imagens/exibicao_imagens_page.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:atlas_digital_fmabc/screens/imagem_teste/imagem_teste.dart';
 import 'package:atlas_digital_fmabc/screens/saved_itens/saved_itens.dart';
 import 'package:atlas_digital_fmabc/screens/slides/explore_slides_page.dart';
 import 'package:atlas_digital_fmabc/common/widgets/layout/main_layout.dart';
+import 'package:atlas_digital_fmabc/widgets/lists/image_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,6 +54,15 @@ final router = GoRouter(
             GoRoute(
               path: Routes.slidesPage,
               builder: (context, state) => ExploreSlidesPage(),
+              routes: [
+                GoRoute(
+                  path: 'imagem/:imagemId',
+                  builder: (context, state) {
+                    final imagem = state.extra as ImageModel; 
+                    return ExibicaoImagensPage(imagem: imagem);
+                  },
+                ),
+              ],
             ),
           ],
         ),

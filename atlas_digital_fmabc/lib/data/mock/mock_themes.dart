@@ -1,23 +1,30 @@
 import 'package:atlas_digital_fmabc/models/groups/theme_model.dart';
+import 'package:atlas_digital_fmabc/models/image_model.dart';
+
+final imagem1 = ImageModel(id: '1', nome: 'IMAGEM1', url: 'https://images.unsplash.com/photo-1761839258753-85d8eecbbc29?ixlib=rb-4.1.0& ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170', descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae convallis metus. Fusce lectus tellus, mattis ut sagittis in, faucibus et sapien. Integer tincidunt ornare tincidunt. In ac lorem in nunc feugiat tincidunt sit amet ut nisl. Suspendisse fermentum, erat at fermentum congue, augue erat faucibus nulla, nec maximus mi justo ut risus. Sed auctor sem facilisis nulla efficitur, in semper lorem aliquet. Nam metus sapien, dapibus in erat sed, efficitur iaculis tortor. Proin sollicitudin, odio sed posuere sagittis, diam arcu eleifend ex, vel laoreet justo tellus ut eros. Praesent convallis, risus vel pharetra pretium, ipsum lectus vehicula lectus, molestie consequat eros magna sed lectus. Etiam nec elit nunc. Fusce suscipit mollis nisl, faucibus ornare dui viverra eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla at mattis sapien. Mauris pellentesque a purus ut efficitur. Praesent quis lacus vitae risus dapibus tempus sed eu ante. Curabitur posuere, eros ac molestie lacinia, dolor tellus maximus nisl, nec luctus leo purus sed velit. Fusce tincidunt condimentum tellus, a venenatis lacus elementum vel. Integer varius nec ligula in congue. Fusce porta volutpat velit, non tincidunt lorem laoreet varius. Aliquam quis venenatis ante. Praesent finibus pretium diam, sit amet consectetur neque interdum ac. Nulla gravida sagittis luctus. Vivamus facilisis, ex ac vehicula eleifend, ipsum velit semper elit, vitae pharetra nisi ante nec nulla. Nam orci augue, scelerisque eget orci nec, ultricies elementum nulla. Integer cursus, velit eget rhoncus tincidunt, lectus ex semper elit, non pellentesque neque ante ac elit. Cras nec dignissim tellus. Nulla feugiat purus ac congue euismod. Phasellus ornare pretium purus. Curabitur in posuere elit. Sed tincidunt nisl non dapibus fermentum. Donec quis ligula at tellus pharetra euismod. Nullam vel est eros. Proin suscipit erat facilisis vehicula placerat. Nam ullamcorper turpis ultricies placerat volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla facilisi. Donec finibus molestie sem ac volutpat. Nam hendrerit ipsum ultricies tortor bibendum, at pharetra velit auctor. Phasellus viverra augue ut turpis commodo, a tincidunt metus pharetra. Nam ultricies bibendum odio, nec pharetra ipsum placerat ut. Proin pellentesque lorem eros, quis fermentum orci sodales sagittis. Sed volutpat elementum enim eget venenatis. Aliquam maximus, ante vel elementum blandit, justo nunc euismod nisl, blandit faucibus eros quam consequat felis. Integer ut massa at quam placerat convallis. Pellentesque a tortor magna. Etiam nec pharetra mauris, ut vestibulum justo. Proin vitae bibendum ligula, vitae efficitur quam. Curabitur eu mollis massa, vitae eleifend arcu. Duis convallis vulputate ex, non imperdiet velit vulputate a. Donec in eros eget ligula lacinia ultricies. Vestibulum sit amet augue commodo, bibendum nisi in, maximus tellus. Vivamus condimentum enim et neque scelerisque, interdum ullamcorper lacus vulputate. Curabitur aliquet, nisi et finibus vestibulum, purus metus ullamcorper eros, quis sodales dolor eros et libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet ante in est tristique accumsan.");
+final imagem2 = ImageModel(id: '2', nome: 'IMAGEM2', url: 'https://images.unsplash.com/photo-1761872936374-ec038c00d705?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170', descricao: 'AADOWAD WANID WAIND NWPAI DPAWNPDO AWN');
+final imagem3 = ImageModel(id: '3', nome: 'IMAGEM3', url: 'https://images.unsplash.com/photo-1760644520246-e84fadc18cd6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170',
+descricao: '*descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* *descrição :D* ');
+final imagem4 = ImageModel(id: '4', nome: 'IMAGEM4', url: 'https://images.unsplash.com/photo-1761995912979-c3646524391b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=764', descricao: 'descrição!');
 
 /// Exemplo de temas.
 final List<ThemeModel> mockThemes = [
-  ThemeModel(name: "Epitélio", quantSlides: 10),
-  ThemeModel(name: "Tecido Conjuntivo", quantSlides: 8),
-  ThemeModel(name: "Músculo", quantSlides: 12),
-  ThemeModel(name: "Cartilagem e Osso", quantSlides: 15),
-  ThemeModel(name: "Tecido Nervoso", quantSlides: 9),
-  ThemeModel(name: "Sangue Periférico", quantSlides: 11),
-  ThemeModel(name: "Hematopoiese", quantSlides: 7),
-  ThemeModel(name: "Sistema Cardiovascular", quantSlides: 6),
-  ThemeModel(name: "Sistema Linfoide", quantSlides: 5),
-  ThemeModel(name: "Pele", quantSlides: 14),
-  ThemeModel(name: "Glândulas Exócrinas", quantSlides: 4),
-  ThemeModel(name: "Glândulas Endócrinas", quantSlides: 3),
-  ThemeModel(name: "Trato Gastrointestinal", quantSlides: 13),
-  ThemeModel(name: "Fígado e Vesícula Biliar", quantSlides: 10),
-  ThemeModel(name: "Sistema Urinário", quantSlides: 8),
-  ThemeModel(name: "Sistema Respiratório", quantSlides: 9),
-  ThemeModel(name: "Sistema Reprodutor Feminino", quantSlides: 12),
-  ThemeModel(name: "Sistema Reprodutor Masculino", quantSlides: 11),
+  ThemeModel(id:'1', name: "Epitélio", quantSlides: 10, listaDeImagens: [imagem1, imagem2, imagem3, imagem4]),
+  ThemeModel(id:'2',name: "Tecido Conjuntivo", quantSlides: 8, listaDeImagens: [imagem2, imagem4]),
+  ThemeModel(id:'3',name: "Músculo", quantSlides: 12, listaDeImagens: [imagem3]),
+  ThemeModel(id:'4',name: "Cartilagem e Osso", quantSlides: 15, listaDeImagens: []),
+  ThemeModel(id:'5',name: "Tecido Nervoso", quantSlides: 9, listaDeImagens: []),
+  ThemeModel(id:'6',name: "Sangue Periférico", quantSlides: 11, listaDeImagens: []),
+  ThemeModel(id:'7',name: "Hematopoiese", quantSlides: 7, listaDeImagens: []),
+  ThemeModel(id:'8',name: "Sistema Cardiovascular", quantSlides: 6, listaDeImagens: []),
+  ThemeModel(id:'9',name: "Sistema Linfoide", quantSlides: 5, listaDeImagens: []),
+  ThemeModel(id:'10',name: "Pele", quantSlides: 14, listaDeImagens: []),
+  ThemeModel(id:'11',name: "Glândulas Exócrinas", quantSlides: 4, listaDeImagens: []),
+  ThemeModel(id:'12',name: "Glândulas Endócrinas", quantSlides: 3, listaDeImagens: []),
+  ThemeModel(id:'13',name: "Trato Gastrointestinal", quantSlides: 13, listaDeImagens: []),
+  ThemeModel(id:'14',name: "Fígado e Vesícula Biliar", quantSlides: 10, listaDeImagens: []),
+  ThemeModel(id:'15',name: "Sistema Urinário", quantSlides: 8, listaDeImagens: []),
+  ThemeModel(id:'16',name: "Sistema Respiratório", quantSlides: 9, listaDeImagens: []),
+  ThemeModel(id:'17',name: "Sistema Reprodutor Feminino", quantSlides: 12, listaDeImagens: []),
+  ThemeModel(id:'18',name: "Sistema Reprodutor Masculino", quantSlides: 11, listaDeImagens: []),
 ];

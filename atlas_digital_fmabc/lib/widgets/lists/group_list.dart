@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 
 /// Seção de lista de temas.
 class GroupList extends StatelessWidget {
-  const GroupList({super.key, required this.list});
-
-  final List<GroupModel> list;
+  const GroupList({super.key, required this.listaDeGrupos, this.onCardTap});
+  final void Function(GroupModel)? onCardTap; 
+  final List<GroupModel> listaDeGrupos;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-      itemCount: list.length,
+      itemCount: listaDeGrupos.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 360, // width máxima do card
         mainAxisExtent: 94, // height do card
@@ -22,7 +22,7 @@ class GroupList extends StatelessWidget {
       ),
 
       // cards
-      itemBuilder: (context, index) => GroupCard(group: list[index]),
+      itemBuilder: (context, index) => GroupCard(group: listaDeGrupos[index], onTap: () => onCardTap?.call(listaDeGrupos[index])),
     );
   }
 }
