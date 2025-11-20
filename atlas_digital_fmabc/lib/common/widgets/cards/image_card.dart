@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:atlas_digital_fmabc/models/image_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +34,7 @@ class ImageCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               // Quantidade de lâminas
-              Image.network(imagemDesseCard.url, fit: BoxFit.fill,)
+              Image.memory(base64Decode(imagemDesseCard.url), fit: BoxFit.fill,)
             ],
           ),
         ),

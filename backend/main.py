@@ -76,8 +76,8 @@ async def get_thumbnail(image_name : Annotated[str, Path()]):
 @app.get("/categories")
 async def get_categories():
     categorydb = CategoryDB(getDatabase(CategoryDB.collection_name))
-    categories = categorydb.get_categories()
-    return {"categorias" : categories}
+    categories = categorydb.get_category_images()
+    return {"categories" : categories}
 
 @app.post("/category")
 async def create_category(request : Request):

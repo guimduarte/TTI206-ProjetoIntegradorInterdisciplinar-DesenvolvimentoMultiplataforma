@@ -1,6 +1,7 @@
 import 'package:atlas_digital_fmabc/data/mock/mock_themes.dart';
 import 'package:atlas_digital_fmabc/common/widgets/layout/app_bar/title_and_supporting_text.dart';
 import 'package:atlas_digital_fmabc/models/groups/group_model.dart';
+import 'package:atlas_digital_fmabc/services/category_service.dart';
 import 'package:atlas_digital_fmabc/widgets/lists/group_list.dart';
 import 'package:atlas_digital_fmabc/widgets/lists/image_list.dart';
 import 'package:atlas_digital_fmabc/widgets/search/search_section.dart';
@@ -16,7 +17,7 @@ class ExploreSlidesPage extends StatefulWidget {
 }
 
 class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
-  final themesList = mockThemes;
+  final categoryService = CategoryService();
 
   // Variável que controla qual grupo (de imagens ou temas) mostrar
   GroupModel? selectedGroup;
@@ -39,75 +40,105 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                 Tab(text: "Turmas"),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // Aba Temas
-                  selectedGroup == null
-                      ? GroupList(
-                          listaDeGrupos: themesList,
-                          onCardTap: (group) async {
-                            await Future.delayed(const Duration(milliseconds: 100));
-                            setState(() {
-                              selectedGroup = group;
-                              selectedGroupName = group.name;
-                            });
-                          },
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            children: [
-                              // Cabeçalho do grupo escolhido
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF2F2F2), // fundo da faixa
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.center,
+            FutureBuilder(
+              future: categoryService.getCategories(),
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.hasData) {
+                  final themesList = asyncSnapshot.data!;
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Aba Temas
+                        selectedGroup == null
+                            ? GroupList(
+                                listaDeGrupos: themesList,
+                                onCardTap: (group) async {
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                  );
+                                  setState(() {
+                                    selectedGroup = group;
+                                    selectedGroupName = group.name;
+                                  });
+                                },
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
                                   children: [
-                                    // Texto centralizado na tela
-                                    Text(
-                                      selectedGroupName!,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 129, 129, 129),
-                                        fontSize: 18,
+                                    // Cabeçalho do grupo escolhido
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(
+                                          0xFFF2F2F2,
+                                        ), // fundo da faixa
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          // Texto centralizado na tela
+                                          Text(
+                                            selectedGroupName!,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromARGB(
+                                                255,
+                                                129,
+                                                129,
+                                                129,
+                                              ),
+                                              fontSize: 18,
+                                            ),
+                                          ),
+
+                                          // Botão de voltar
+                                          Positioned(
+                                            left: 8,
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                await Future.delayed(
+                                                  const Duration(
+                                                    milliseconds: 80,
+                                                  ),
+                                                );
+                                                setState(() {
+                                                  selectedGroup = null;
+                                                });
+                                              },
+                                              child: const Text("Voltar"),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
 
-                                    // Botão de voltar
-                                    Positioned(
-                                      left: 8,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                        await Future.delayed(const Duration(milliseconds: 80));
-                                          setState(() {
-                                            selectedGroup = null;
-                                          });
-                                        },
-                                        child: const Text("Voltar"),
+                                    // Lista dos cards das imagens
+                                    Expanded(
+                                      child: ImageList(
+                                        listaDeImagens:
+                                            selectedGroup!.listaDeImagens,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
 
-                              // Lista dos cards das imagens
-                              Expanded(
-                                child: ImageList(listaDeImagens: selectedGroup!.listaDeImagens),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                  // Aba Turmas
-                  Text("Turmas"),
-                ],
-              ),
+                        // Aba Turmas
+                        Text("Turmas"),
+                      ],
+                    ),
+                  );
+                } else if (asyncSnapshot.hasError) {
+                  return Text("Houve um erro");
+                } else {
+                  return Text("Carregando");
+                }
+              },
             ),
           ],
         ),
@@ -132,4 +163,3 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
     );
   }
 }
-

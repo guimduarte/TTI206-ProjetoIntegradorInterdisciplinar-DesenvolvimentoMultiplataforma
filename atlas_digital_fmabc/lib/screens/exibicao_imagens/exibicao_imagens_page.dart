@@ -45,7 +45,7 @@ LayoutBuilder(
                         alignment: Alignment.center,
                         transform: Matrix4.identity()..scale(espelhado ? -1.0 : 1.0, 1.0, 1.0),
                         child: ImageVisualizer(
-                          imageName: "Mirax2.2-4-PNG.mrxs-tiles",
+                          imageName: widget.imagem.nome,
                           espelhado: espelhado,
                         ),
                       ),
@@ -90,7 +90,7 @@ LayoutBuilder(
                     alignment: Alignment.center,
                     transform: Matrix4.identity()..scale(espelhado ? -1.0 : 1.0, 1.0, 1.0),
                     child: ImageVisualizer(
-                      imageName: "Mirax2.2-4-PNG.mrxs-tiles",
+                      imageName: widget.imagem.nome,
                       espelhado: espelhado,
                     ),
                   ),

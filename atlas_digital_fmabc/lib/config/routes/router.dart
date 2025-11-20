@@ -59,7 +59,6 @@ final router = GoRouter(
                   path: 'imagem/:imagemId',
                   builder: (context, state) {
                     final imagem = state.extra as ImageModel; 
-                    final imageId = state.pathParameters['imagemId']!;
                     return ExibicaoImagensPage(imagem: imagem);
                   },
                 ),
