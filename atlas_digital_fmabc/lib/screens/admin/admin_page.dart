@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:atlas_digital_fmabc/widgets/form/cadastro_form.dart';
 import 'package:atlas_digital_fmabc/services/auth_service.dart';
 import 'package:atlas_digital_fmabc/services/category_service.dart';
+import 'package:atlas_digital_fmabc/widgets/form/image_editor_form.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -451,6 +452,53 @@ class _AdminPageState extends State<AdminPage> {
                     children: imagens
                         .map((img) => Chip(label: Text(img)))
                         .toList(),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height:24),
+              _buildSectionCard(
+                title: "Gerenciar Imagens do Banco", 
+                children: [
+                  if(imagensDisponiveis.isEmpty)
+                  const Padding(padding: EdgeInsets.all(8.0),
+                  child: Text("Nenhuma imagem encontrada"),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: imagensDisponiveis.map((imgName){
+                      return ActionChip(
+                        elevation: 1,
+                        avatar: const Icon(Icons.edit, size: 16, color: Colors.blueGrey),
+                        label: Text(imgName),
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.all(8),
+                        onPressed: (){
+                          showDialog(
+                            context: context, 
+                            builder: (context){
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)
+                                ),
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 450),
+                                  child: ImageEditorForm(
+                                    imageName: imgName,
+                                    currentDescription: "",
+                                    onSuccess: (){
+                                      _fetchImagensDisponiveis();
+                                      _fetchCategorias();
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
