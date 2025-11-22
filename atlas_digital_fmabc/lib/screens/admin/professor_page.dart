@@ -26,7 +26,7 @@ class _ProfessorAreaState extends State<ProfessorArea> {
           icon: const Icon(Icons.arrow_back),
           tooltip: "Voltar para o Início",
           onPressed: () {
-            context.go(Routes.loginPage);
+            context.go(Routes.homePage);
           },
         ),
       ),
