@@ -35,7 +35,7 @@ class _UploadImageState extends State<UploadImage> {
       return;
     }
     final directory = Directory(directoryPath);
-    final outputFileName = p.relative("temp.tar", from: p.dirname(directoryPath));
+    final outputFileName = "${p.dirname(directoryPath)}/temp.tar";
     final outputFile = File(outputFileName).openWrite();
     final List<TarEntry> entries = [];
     await for (final entity in directory.list(recursive: true)) {
