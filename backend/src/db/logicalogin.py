@@ -34,7 +34,7 @@ def get_current_user(token: str, db):
     email = payload.get("email")
     if email is None:
         return None
-    usuario = db.usuario.find_one({'email':email})
+    usuario = db.find_one({'email':email})
     if usuario is None:
         return None
     return usuario

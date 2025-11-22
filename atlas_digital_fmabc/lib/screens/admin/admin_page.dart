@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:atlas_digital_fmabc/widgets/form/cadastro_form.dart';
 import 'package:atlas_digital_fmabc/services/auth_service.dart';
 import 'package:atlas_digital_fmabc/services/category_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -120,7 +121,10 @@ class _AdminPageState extends State<AdminPage> {
 
     try {
       final url = Uri.parse('http://localhost:8000/users');
-      final response = await http.get(url);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString("token");
+      token ??= "";
+      final response = await http.get(url, headers: {"Authorization": token});
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body);
@@ -196,86 +200,106 @@ class _AdminPageState extends State<AdminPage> {
     Set<String> imagensSelecionadas = Set.from(
       categoriaExistente["images"]?.cast<String>() ?? [],
     );
-    final result = await showDialog<Map<String,dynamic>>(
+    final result = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (context) {
         final controller = TextEditingController(text: currentName);
         return StatefulBuilder(
-          builder: (BuildContext context,
-          StateSetter setStateDialog){
+          builder: (BuildContext context, StateSetter setStateDialog) {
             return AlertDialog(
               title: const Text("Editar Categoria"),
               content: SizedBox(
-                width: MediaQuery.of
-                (context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Nome da Categoria:", style: TextStyle(fontWeight:FontWeight.bold)),
+                      const Text(
+                        "Nome da Categoria:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       TextField(controller: controller),
                       const SizedBox(height: 15),
-                      const Text("Imagens Associadas:", style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text(
+                        "Imagens Associadas:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       ...imagensDisponiveis.map((imgName) {
-                          return CheckboxListTile(
-                              dense: true,
-                              title: Text(imgName, style: const TextStyle(fontSize: 14)),
-                                value: imagensSelecionadas.contains(imgName),
-                                onChanged: (bool? newValue) {
-                                  setStateDialog(() { 
-                                    if (newValue == true) {
-                                        imagensSelecionadas.add(imgName);
-                                    } else {
-                                        imagensSelecionadas.remove(imgName);
-                                    }
-                                 });
-                               },
-                             );
-                            }).toList(),
-                          ],
-                        ),
-                     ),
-                    ),
-                    actions: [
-                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
-                        ElevatedButton(
-                            onPressed: () => Navigator.pop(context, {
-                                'new_name': controller.text.trim(),
-                                'new_images': imagensSelecionadas.toList(),
-                            }),
-                            child: const Text("Salvar"),
-                        ),
+                        return CheckboxListTile(
+                          dense: true,
+                          title: Text(
+                            imgName,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          value: imagensSelecionadas.contains(imgName),
+                          onChanged: (bool? newValue) {
+                            setStateDialog(() {
+                              if (newValue == true) {
+                                imagensSelecionadas.add(imgName);
+                              } else {
+                                imagensSelecionadas.remove(imgName);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
                     ],
-                );
-            }
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancelar"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, {
+                    'new_name': controller.text.trim(),
+                    'new_images': imagensSelecionadas.toList(),
+                  }),
+                  child: const Text("Salvar"),
+                ),
+              ],
+            );
+          },
         );
       },
-   );
+    );
 
     if (result != null && result is Map) {
-        final newName = result['new_name'];
-        final newImages = result['new_images'];
-        
-        if (newName.isNotEmpty && (newName != currentName || newImages != (categoriaExistente["images"] ?? []))) {
-          final resultado = await _categoryService.updateCategory(
-            oldName: oldName,
-            newName: newName,
-            newImages: newImages.cast<String>(),
-            );
+      final newName = result['new_name'];
+      final newImages = result['new_images'];
 
-            if (resultado.containsKey("success")) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.green.shade700)
-                );
-                await _fetchCategorias(); // Recarrega para mostrar o novo nome e as tags
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.red.shade700)
+      if (newName.isNotEmpty &&
+          (newName != currentName ||
+              newImages != (categoriaExistente["images"] ?? []))) {
+        final resultado = await _categoryService.updateCategory(
+          oldName: oldName,
+          newName: newName,
+          newImages: newImages.cast<String>(),
         );
+
+        if (resultado.containsKey("success")) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(resultado["message"]),
+              backgroundColor: Colors.green.shade700,
+            ),
+          );
+          await _fetchCategorias(); // Recarrega para mostrar o novo nome e as tags
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(resultado["message"]),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
       }
     }
   }
-}
+
   @override
   void dispose() {
     _temaController.dispose();

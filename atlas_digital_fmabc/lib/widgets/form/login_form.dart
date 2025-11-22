@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:atlas_digital_fmabc/services/auth_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Formulário de login.
 class LoginForm extends StatefulWidget {
@@ -48,6 +49,8 @@ class _LoginFormState extends State<LoginForm> {
 
     if (!resultado.containsKey('error')) {
       // Login successful!
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("token", resultado["token"]);
       _showSnackBar('Login bem-sucedido!', isError: false);
       _navigateToPage(context, resultado["is_admin"]!);
     } else {

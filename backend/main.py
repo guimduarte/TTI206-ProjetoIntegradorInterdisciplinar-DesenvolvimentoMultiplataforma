@@ -5,6 +5,7 @@ from fastapi import FastAPI, Form, HTTPException, Path, Request, Response, Uploa
 import json
 from dotenv import dotenv_values
 import tempfile
+from fastapi.responses import RedirectResponse
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
 from src.db import category
 from src.db.category import CategoryDB
@@ -13,7 +14,7 @@ from pymongo import MongoClient
 from src.image import generate_image, decompress_file, generate_thumbnail
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
-from src.db.logicalogin import cadastro_professor, autenticar_professor,deletar_professor
+from src.db.logicalogin import cadastro_professor, autenticar_professor,deletar_professor, get_current_user
 from src.db.category import CategoryDB
 
 config = dotenv_values(".env")
@@ -35,6 +36,30 @@ app.add_middleware(CORSMiddleware,
                    allow_methods=["*"],
                    allow_headers=["*"],
                    )
+
+both_paths = ("/image", "/category", "/categories")
+admin_paths = ("/users","/register")
+
+@app.middleware("http")
+async def login_middleware(request: Request, call_next):
+    if request.method in ["PUT", "POST", "DELETE"] or request.url.path.startswith("/users"):
+        if request.url.path.startswith(admin_paths) or request.url.path.startswith(both_paths):
+            authorization = request.headers.get("authorization")
+            if authorization is not None:
+                token = authorization.split(" ")[1]
+                user = get_current_user(token, getDatabase("usuario"))
+                if user is None:
+                    raise HTTPException(status_code=HTTP_401_UNAUTHORIZED)
+                if request.url.path.startswith(both_paths):
+                    response = await call_next(request)
+                    return response
+                elif user["tipo"] == "admin":
+                    response = await call_next(request)
+                    return response
+            raise HTTPException(status_code=HTTP_401_UNAUTHORIZED)
+    response = await call_next(request)
+    return response
+    
 
 def getDatabase(collection_name : str):
     return app.database[collection_name]
@@ -121,7 +146,7 @@ async def login(request: Request):
     token, is_admin = autenticar_professor(app.database,email_professor, senha)
     if token is not None:
         print(f"Login bem-sucedido para: {email_professor}")
-        return {'token': token, "is_admin" : is_admin}
+        return {'token': f"Bearer {token}", "is_admin" : is_admin}
     else:
         print(f"Falha no login para: {email_professor}")
         raise HTTPException(status_code= HTTP_401_UNAUTHORIZED ,detail='Credenciais inválidas.')
@@ -221,8 +246,6 @@ async def update_category_endpoint(category_name: str, request: Request):
         category_db.update_category(category_name, new_name, new_images)        
         return {"message": f"Categoria '{category_name}' atualizada com sucesso."}
     
-    except HTTPException:
-        raise
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro ao atualizar categoria: {str(e)}")
                                  
