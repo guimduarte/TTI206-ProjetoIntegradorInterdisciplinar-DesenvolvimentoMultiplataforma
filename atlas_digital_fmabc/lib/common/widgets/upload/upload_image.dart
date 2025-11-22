@@ -35,7 +35,7 @@ class _UploadImageState extends State<UploadImage> {
       return;
     }
     final directory = Directory(directoryPath);
-    final outputFileName = "${p.dirname(directoryPath)}/temp.tar";
+    final outputFileName = p.absolute(p.dirname(directoryPath), "temp.tar");
     final outputFile = File(outputFileName).openWrite();
     final List<TarEntry> entries = [];
     await for (final entity in directory.list(recursive: true)) {
@@ -82,9 +82,12 @@ class _UploadImageState extends State<UploadImage> {
           }),
           decoration: InputDecoration(labelText: "Descrição da Imagem"),
         ),
-        ElevatedButton(child: const Text("Enviar Imagem"), onPressed: () => {
-            uploadService.uploadImage(_tarPath, _imageName, _imageDescription)
-        }),
+        ElevatedButton(
+          child: const Text("Enviar Imagem"),
+          onPressed: () => {
+            uploadService.uploadImage(_tarPath, _imageName, _imageDescription),
+          },
+        ),
       ],
     );
   }
