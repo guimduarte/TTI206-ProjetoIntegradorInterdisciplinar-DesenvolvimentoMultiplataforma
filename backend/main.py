@@ -256,8 +256,6 @@ async def update_image_details(image_name: str, request: Request):
              raise HTTPException(status_code=404, detail="Imagem não encontrada")
         imagedb.update_image_info(new_description)
         return {"message": "Descrição atualizada com sucesso", "success": True}
-    except HTTPException:
-        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao atualizar: {str(e)}")
 
