@@ -1,5 +1,7 @@
 import 'package:atlas_digital_fmabc/common/widgets/upload/upload_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 
 class ProfessorArea extends StatefulWidget {
   const ProfessorArea({super.key});
@@ -20,6 +22,13 @@ class _ProfessorAreaState extends State<ProfessorArea> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text("Área do Professor"),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: "Voltar para o Início",
+          onPressed: () {
+            context.go(Routes.loginPage);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -85,8 +94,9 @@ class _ProfessorAreaState extends State<ProfessorArea> {
                           String? novoTema = await showDialog(
                             context: context,
                             builder: (context) {
-                              final controller =
-                                  TextEditingController(text: tema);
+                              final controller = TextEditingController(
+                                text: tema,
+                              );
                               return AlertDialog(
                                 title: const Text("Editar Tema"),
                                 content: TextField(controller: controller),
@@ -96,8 +106,8 @@ class _ProfessorAreaState extends State<ProfessorArea> {
                                     child: const Text("Cancelar"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => Navigator.pop(
-                                        context, controller.text),
+                                    onPressed: () =>
+                                        Navigator.pop(context, controller.text),
                                     child: const Text("Salvar"),
                                   ),
                                 ],

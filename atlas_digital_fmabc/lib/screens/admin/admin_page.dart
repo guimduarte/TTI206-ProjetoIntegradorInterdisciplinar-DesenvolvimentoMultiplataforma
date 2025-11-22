@@ -5,6 +5,8 @@ import 'package:atlas_digital_fmabc/widgets/form/cadastro_form.dart';
 import 'package:atlas_digital_fmabc/services/auth_service.dart';
 import 'package:atlas_digital_fmabc/services/category_service.dart';
 import 'package:atlas_digital_fmabc/widgets/form/image_editor_form.dart';
+import 'package:go_router/go_router.dart';
+import 'package:atlas_digital_fmabc/config/routes/routes.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -197,86 +199,106 @@ class _AdminPageState extends State<AdminPage> {
     Set<String> imagensSelecionadas = Set.from(
       categoriaExistente["images"]?.cast<String>() ?? [],
     );
-    final result = await showDialog<Map<String,dynamic>>(
+    final result = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (context) {
         final controller = TextEditingController(text: currentName);
         return StatefulBuilder(
-          builder: (BuildContext context,
-          StateSetter setStateDialog){
+          builder: (BuildContext context, StateSetter setStateDialog) {
             return AlertDialog(
               title: const Text("Editar Categoria"),
               content: SizedBox(
-                width: MediaQuery.of
-                (context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Nome da Categoria:", style: TextStyle(fontWeight:FontWeight.bold)),
+                      const Text(
+                        "Nome da Categoria:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       TextField(controller: controller),
                       const SizedBox(height: 15),
-                      const Text("Imagens Associadas:", style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text(
+                        "Imagens Associadas:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       ...imagensDisponiveis.map((imgName) {
-                          return CheckboxListTile(
-                              dense: true,
-                              title: Text(imgName, style: const TextStyle(fontSize: 14)),
-                                value: imagensSelecionadas.contains(imgName),
-                                onChanged: (bool? newValue) {
-                                  setStateDialog(() { 
-                                    if (newValue == true) {
-                                        imagensSelecionadas.add(imgName);
-                                    } else {
-                                        imagensSelecionadas.remove(imgName);
-                                    }
-                                 });
-                               },
-                             );
-                            }).toList(),
-                          ],
-                        ),
-                     ),
-                    ),
-                    actions: [
-                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
-                        ElevatedButton(
-                            onPressed: () => Navigator.pop(context, {
-                                'new_name': controller.text.trim(),
-                                'new_images': imagensSelecionadas.toList(),
-                            }),
-                            child: const Text("Salvar"),
-                        ),
+                        return CheckboxListTile(
+                          dense: true,
+                          title: Text(
+                            imgName,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          value: imagensSelecionadas.contains(imgName),
+                          onChanged: (bool? newValue) {
+                            setStateDialog(() {
+                              if (newValue == true) {
+                                imagensSelecionadas.add(imgName);
+                              } else {
+                                imagensSelecionadas.remove(imgName);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
                     ],
-                );
-            }
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancelar"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, {
+                    'new_name': controller.text.trim(),
+                    'new_images': imagensSelecionadas.toList(),
+                  }),
+                  child: const Text("Salvar"),
+                ),
+              ],
+            );
+          },
         );
       },
-   );
+    );
 
     if (result != null && result is Map) {
-        final newName = result['new_name'];
-        final newImages = result['new_images'];
-        
-        if (newName.isNotEmpty && (newName != currentName || newImages != (categoriaExistente["images"] ?? []))) {
-          final resultado = await _categoryService.updateCategory(
-            oldName: oldName,
-            newName: newName,
-            newImages: newImages.cast<String>(),
-            );
+      final newName = result['new_name'];
+      final newImages = result['new_images'];
 
-            if (resultado.containsKey("success")) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.green.shade700)
-                );
-                await _fetchCategorias(); // Recarrega para mostrar o novo nome e as tags
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(resultado["message"]), backgroundColor: Colors.red.shade700)
+      if (newName.isNotEmpty &&
+          (newName != currentName ||
+              newImages != (categoriaExistente["images"] ?? []))) {
+        final resultado = await _categoryService.updateCategory(
+          oldName: oldName,
+          newName: newName,
+          newImages: newImages.cast<String>(),
         );
+
+        if (resultado.containsKey("success")) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(resultado["message"]),
+              backgroundColor: Colors.green.shade700,
+            ),
+          );
+          await _fetchCategorias(); // Recarrega para mostrar o novo nome e as tags
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(resultado["message"]),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
       }
     }
   }
-}
+
   @override
   void dispose() {
     _temaController.dispose();
@@ -293,6 +315,13 @@ class _AdminPageState extends State<AdminPage> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text("Área do Admin"),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: "Voltar para o Início",
+          onPressed: () {
+            context.go(Routes.homePage);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -456,38 +485,45 @@ class _AdminPageState extends State<AdminPage> {
                 ],
               ),
 
-              const SizedBox(height:24),
+              const SizedBox(height: 24),
               _buildSectionCard(
-                title: "Gerenciar Imagens do Banco", 
+                title: "Gerenciar Imagens do Banco",
                 children: [
-                  if(imagensDisponiveis.isEmpty)
-                  const Padding(padding: EdgeInsets.all(8.0),
-                  child: Text("Nenhuma imagem encontrada"),
-                  ),
+                  if (imagensDisponiveis.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Nenhuma imagem encontrada"),
+                    ),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: imagensDisponiveis.map((imgName){
+                    children: imagensDisponiveis.map((imgName) {
                       return ActionChip(
                         elevation: 1,
-                        avatar: const Icon(Icons.edit, size: 16, color: Colors.blueGrey),
+                        avatar: const Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.blueGrey,
+                        ),
                         label: Text(imgName),
                         backgroundColor: Colors.white,
                         padding: const EdgeInsets.all(8),
-                        onPressed: (){
+                        onPressed: () {
                           showDialog(
-                            context: context, 
-                            builder: (context){
+                            context: context,
+                            builder: (context) {
                               return Dialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: ConstrainedBox(
-                                  constraints: const BoxConstraints(maxWidth: 450),
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 450,
+                                  ),
                                   child: ImageEditorForm(
                                     imageName: imgName,
                                     currentDescription: "",
-                                    onSuccess: (){
+                                    onSuccess: () {
                                       _fetchImagensDisponiveis();
                                       _fetchCategorias();
                                     },
