@@ -26,7 +26,11 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
   String _query = "";
   List<ImageModel> _filteredSlides = [];
   final List<ImageModel> _allSlides = [];
+  final List<GroupModel> _turmaGroups = [];
+  final List<GroupModel> _categoryGroups = [];
   bool _loading = true;
+
+  List<Tab> tabs = [Tab(text: "Temas"), Tab(text: "Turmas")];
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +79,7 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                 ),
               ),
             ),
-            TabBar(
-              tabs: [
-                Tab(text: "Temas"),
-                Tab(text: "Turmas"),
-              ],
-            ),
+            TabBar(tabs: tabs),
             FutureBuilder(
               future: categoryService.getCategories(),
               builder: (context, asyncSnapshot) {
@@ -89,7 +88,14 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                   _loading = false;
                   Set<String> imageNames = {};
                   _allSlides.clear();
+                  _turmaGroups.clear();
+                  _categoryGroups.clear();
                   for (var theme in themesList) {
+                    if (theme.name.toLowerCase().contains("turma")) {
+                      _turmaGroups.add(theme);
+                    } else {
+                      _categoryGroups.add(theme);
+                    }
                     for (var image in theme.listaDeImagens) {
                       if (!imageNames.contains(image.nome)) {
                         _allSlides.add(image);
@@ -99,15 +105,16 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                   }
                   return Expanded(
                     child: TabBarView(
-                      children: [
-                        // Aba Temas
-                        if (_query.trimLeft().trimRight() != "")
-                          Expanded(
+                      children: tabs.map((Tab tab) {
+                        if (_query.trimLeft().trimRight() != "") {
+                          return Expanded(
                             child: ImageList(listaDeImagens: _filteredSlides),
-                          )
-                        else if (selectedGroup == null)
-                          GroupList(
-                            listaDeGrupos: themesList,
+                          );
+                        } else if (selectedGroup == null) {
+                          return GroupList(
+                            listaDeGrupos: tab == tabs[0]
+                                ? _categoryGroups
+                                : _turmaGroups,
                             onCardTap: (group) async {
                               await Future.delayed(
                                 const Duration(milliseconds: 100),
@@ -117,9 +124,9 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                                 selectedGroupName = group.name;
                               });
                             },
-                          )
-                        else
-                          Padding(
+                          );
+                        } else {
+                          return Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
                               children: [
@@ -181,11 +188,9 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
                                 ),
                               ],
                             ),
-                          ),
-
-                        // Aba Turmas
-                        Text("Turmas"),
-                      ],
+                          );
+                        }
+                      }).toList(),
                     ),
                   );
                 } else if (asyncSnapshot.hasError) {
@@ -199,6 +204,15 @@ class _ExploreSlidesPageState extends State<ExploreSlidesPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> children(List<GroupModel> themesList) {
+    return [
+      // Aba Temas
+
+      // Aba Turmas
+      Text("Turmas"),
+    ];
   }
 
   //AppBar da página de lâminas
