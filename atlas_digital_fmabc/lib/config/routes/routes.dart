@@ -16,4 +16,7 @@ class Routes {
   //Rota da imagem teste
   static const String imagemTeste = "teste";
   static const String nestedImagemPage = "/menu/teste";
+
+  //Rotas extras
+  static const String contatoPage = "/contato";
 }

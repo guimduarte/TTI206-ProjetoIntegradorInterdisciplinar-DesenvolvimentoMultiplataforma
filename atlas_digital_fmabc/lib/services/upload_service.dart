@@ -22,10 +22,6 @@ class UploadService {
         );
       }
     }
-    for (var item in request.files) {
-      print(item.field);
-      print(item.filename);
-    }
     request.fields["image_name"] = imageName;
     request.fields["image_description"] = imageDescription;
     try {

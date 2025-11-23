@@ -4,6 +4,7 @@ import 'package:atlas_digital_fmabc/models/image_model.dart';
 import 'package:atlas_digital_fmabc/screens/admin/auth/login_page.dart';
 import 'package:atlas_digital_fmabc/screens/admin/professor_page.dart';
 import 'package:atlas_digital_fmabc/screens/admin/admin_page.dart';
+import 'package:atlas_digital_fmabc/screens/contatos_page.dart';
 import 'package:atlas_digital_fmabc/screens/exibicao_imagens/exibicao_imagens_page.dart';
 import 'package:atlas_digital_fmabc/screens/home/home_page.dart';
 import 'package:atlas_digital_fmabc/screens/imagem_teste/imagem_teste.dart';
@@ -97,6 +98,10 @@ final router = GoRouter(
                   builder: (context, state) => const TesteImagem(),
                 ),
               ],
+            ),
+            GoRoute(
+              path: Routes.contatoPage,
+              builder: (context, state) => const ContatosPage(),
             ),
           ],
         ),
