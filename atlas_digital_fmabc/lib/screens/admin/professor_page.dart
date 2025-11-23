@@ -14,6 +14,36 @@ class _ProfessorAreaState extends State<ProfessorArea> {
   final TextEditingController _temaController = TextEditingController();
   final List<String> temas = [];
 
+
+  Widget _buildSectionCard({
+    required String title,
+    required List<Widget> children,
+  }) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,103 +66,128 @@ class _ProfessorAreaState extends State<ProfessorArea> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Botão de Upload de Imagens
-              const Text(
-                "Upload de Imagens",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              UploadImage(),
-              const Divider(height: 32),
-
-              // Criação de Temas
-              const Text(
-                "Criação de Temas",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _temaController,
-                decoration: const InputDecoration(
-                  labelText: "Nome do Tema",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () {
-                  if (_temaController.text.isNotEmpty &&
-                      !temas.contains(_temaController.text)) {
-                    setState(() {
-                      temas.add(_temaController.text);
-                      _temaController.clear();
-                    });
-                  }
-                },
-                child: const Text("Criar Tema"),
+              //Upload de Imagens
+              _buildSectionCard(
+                title: "Upload de Imagens",
+                children: [
+                  const UploadImage(),
+                ],
               ),
 
-              const Divider(height: 32),
-
-              // Edição de Temas
-              const Text(
-                "Temas Criados",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //Criação de Temas
+              _buildSectionCard(
+                title: "Criação de Temas",
+                children: [
+                  TextField(
+                    controller: _temaController,
+                    decoration: const InputDecoration(
+                      labelText: "Nome do Tema",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      hintText: "Ex: Histologia Básica",
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_temaController.text.isNotEmpty &&
+                          !temas.contains(_temaController.text)) {
+                        setState(() {
+                          temas.add(_temaController.text);
+                          _temaController.clear();
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      foregroundColor:
+                          Theme.of(context).colorScheme.onSecondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(double.infinity, 48),
+                    ),
+                    child: const Text("Criar Tema"),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              ...temas.asMap().entries.map((entry) {
-                int index = entry.key;
-                String tema = entry.value;
-                return ListTile(
-                  title: Text(tema),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () async {
-                          String? novoTema = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              final controller = TextEditingController(
-                                text: tema,
-                              );
-                              return AlertDialog(
-                                title: const Text("Editar Tema"),
-                                content: TextField(controller: controller),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("Cancelar"),
+
+              //Lista de Temas Criados
+              _buildSectionCard(
+                title: "Temas Criados (${temas.length})",
+                children: temas.isEmpty
+                    ? [
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("Nenhum tema criado ainda."),
+                          ),
+                        ),
+                      ]
+                    : temas.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        String tema = entry.value;
+                        return Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(tema),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.blue),
+                                    onPressed: () async {
+                                      String? novoTema = await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          final controller =
+                                              TextEditingController(text: tema);
+                                          return AlertDialog(
+                                            title: const Text("Editar Tema"),
+                                            content: TextField(
+                                                controller: controller),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text("Cancelar"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, controller.text),
+                                                child: const Text("Salvar"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      if (novoTema != null &&
+                                          novoTema.isNotEmpty) {
+                                        setState(() {
+                                          temas[index] = novoTema;
+                                        });
+                                      }
+                                    },
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, controller.text),
-                                    child: const Text("Salvar"),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
+                                    onPressed: () {
+                                      setState(() {
+                                        temas.removeAt(index);
+                                      });
+                                    },
                                   ),
                                 ],
-                              );
-                            },
-                          );
-                          if (novoTema != null && novoTema.isNotEmpty) {
-                            setState(() {
-                              temas[index] = novoTema;
-                            });
-                          }
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            temas.removeAt(index);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+              ),
             ],
           ),
         ),

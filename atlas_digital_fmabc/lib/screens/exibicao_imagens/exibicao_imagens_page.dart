@@ -75,7 +75,7 @@ LayoutBuilder(
         ),
       );
     } else {
-      // 🖥️ Telas grandes: imagem ocupa toda a altura, texto rola independente
+      //Telas grandes:
       return Row(
         crossAxisAlignment: CrossAxisAlignment.stretch, // estica a imagem verticalmente
         children: [

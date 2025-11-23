@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
     final appBar = AppBar(
       centerTitle: true,
       title: TitleAndSupportingText(
-        title: "Entrar como Professor",
+        title: "Entrar como Professor ou Admin",
         supportingText: "FMABC | Atlas Digital de Biologia Tecidual",
         color: Theme.of(context).colorScheme.onSurface,
       ),
