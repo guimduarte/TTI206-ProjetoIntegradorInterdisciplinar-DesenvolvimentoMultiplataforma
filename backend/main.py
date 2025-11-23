@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from os import stat
+import os
 from typing import Annotated
 from fastapi import FastAPI, Form, HTTPException, Path, Request, Response, UploadFile, status
 import json
@@ -44,8 +45,8 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/image", status_code=status.HTTP_201_CREATED)
-async def upload_image(file: UploadFile, image_name : str = Form(), image_description : str = Form()):
-    image_directory = decompress_file(file)
+async def upload_image(files: list[UploadFile], image_name : str = Form(), image_description : str = Form()):
+    image_directory = decompress_file(files)
     filename = generate_image(image_directory)
     if not filename:
         raise HTTPException(status_code=status.HTTP_412_PRECONDITION_FAILED, detail="Houve um erro ao tentar criar a imagem")
