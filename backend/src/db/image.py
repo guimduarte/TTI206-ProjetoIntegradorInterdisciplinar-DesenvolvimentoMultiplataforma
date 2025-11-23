@@ -53,3 +53,16 @@ class ImageDB:
         if image is None:
             return None
         return base64.b64decode(image["thumbnail"])
+    
+    def update_image_info(self, new_description: str):
+        self.db.update_one(
+            {"image_name": self.image_name},
+            {"$set": {"image_description": new_description}}
+        )
+        print(f"Descrição da Imagem {self.image_name} atualizada.")
+        
+    def delete_image_info(self):
+        self.db.delete_one(
+            {"image_name": self.image_name}
+        )
+        print(f"Imagem {self.image_name} deletada.")

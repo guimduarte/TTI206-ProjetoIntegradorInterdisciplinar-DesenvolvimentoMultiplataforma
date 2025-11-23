@@ -14,7 +14,7 @@ class ImageList extends StatelessWidget {
       itemCount: listaDeImagens.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 360, // width máxima do card
-        mainAxisExtent: 100, // height do card
+        mainAxisExtent: 300, // height do card
         // espaçamento
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,

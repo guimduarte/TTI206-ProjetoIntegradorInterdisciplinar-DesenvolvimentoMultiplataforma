@@ -241,3 +241,34 @@ async def list_available_images():
             detail=f"Erro ao listar imagens: {str(e)}"
         )
 
+# edicao imagens - gui
+@app.put("/image-info/{image_name}", status_code=status.HTTP_200_OK)
+async def update_image_details(image_name: str, request: Request):
+    data = await request.json()
+    new_description = data.get('description')
+    if new_description is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="O campo 'descrição' é obrigatório."
+        )
+    try:
+        imagedb = ImageDB(image_name, getDatabase("image_info"))
+        if not imagedb.get_thumbnail():
+             raise HTTPException(status_code=404, detail="Imagem não encontrada")
+        imagedb.update_image_info(new_description)
+        return {"message": "Descrição atualizada com sucesso", "success": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar: {str(e)}")
+
+@app.delete("/image-info/{image_name}", status_code=status.HTTP_200_OK)
+async def delete_image_details(image_name: str):
+    try:
+        imagedb = ImageDB(image_name, getDatabase("image_info"))
+        if not imagedb.get_thumbnail():
+             raise HTTPException(status_code=404, detail="Imagem não encontrada")
+        imagedb.delete_image_info()
+        return {"message": "Imagem deletada com sucesso", "success": True}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao deletar: {str(e)}")
