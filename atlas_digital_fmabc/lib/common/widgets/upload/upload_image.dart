@@ -38,12 +38,13 @@ class _UploadImageState extends State<UploadImage> {
     final outputFileName = p.absolute(p.dirname(directoryPath), "temp.tar");
     final outputFile = File(outputFileName).openWrite();
     final List<TarEntry> entries = [];
+    var pathContext = p.Context(style: p.Style.posix);
     await for (final entity in directory.list(recursive: true)) {
       if (entity is File) {
         entries.add(
           TarEntry.data(
             TarHeader(
-              name: p.relative(entity.path, from: directoryPath),
+              name: pathContext.relative(entity.path, from: directoryPath),
               mode: int.parse('644', radix: 8),
             ),
             File(entity.path).readAsBytesSync(),
