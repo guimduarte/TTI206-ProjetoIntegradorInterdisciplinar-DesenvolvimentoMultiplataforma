@@ -16,13 +16,13 @@ class _UploadImageState extends State<UploadImage> {
   UploadService uploadService = UploadService();
   late String _imageName;
   late String _imageDescription;
-  late String _tarPath;
+  late String _directoryPath;
 
   @override
   void initState() {
     _imageName = "";
     _imageDescription = "";
-    _tarPath = "";
+    _directoryPath = "";
     super.initState();
   }
 
@@ -34,28 +34,10 @@ class _UploadImageState extends State<UploadImage> {
     if (directoryPath == null) {
       return;
     }
-    final directory = Directory(directoryPath);
-    final outputFileName = "${p.dirname(directoryPath)}/temp.tar";
-    final outputFile = File(outputFileName).openWrite();
-    final List<TarEntry> entries = [];
-    await for (final entity in directory.list(recursive: true)) {
-      if (entity is File) {
-        entries.add(
-          TarEntry.data(
-            TarHeader(
-              name: p.relative(entity.path, from: directoryPath),
-              mode: int.parse('644', radix: 8),
-            ),
-            File(entity.path).readAsBytesSync(),
-          ),
-        );
-      }
-    }
-    await Stream.fromIterable(entries).transform(tarWriter).pipe(outputFile);
-    _tarPath = outputFileName;
+    _directoryPath = directoryPath;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Arquivo criado"),
+        content: Text("Pasta selecionada"),
         backgroundColor: Colors.green.shade700,
         duration: const Duration(seconds: 10),
       ),
@@ -82,9 +64,16 @@ class _UploadImageState extends State<UploadImage> {
           }),
           decoration: InputDecoration(labelText: "Descrição da Imagem"),
         ),
-        ElevatedButton(child: const Text("Enviar Imagem"), onPressed: () => {
-            uploadService.uploadImage(_tarPath, _imageName, _imageDescription)
-        }),
+        ElevatedButton(
+          child: const Text("Enviar Imagem"),
+          onPressed: () => {
+            uploadService.uploadImage(
+              _directoryPath,
+              _imageName,
+              _imageDescription,
+            ),
+          },
+        ),
       ],
     );
   }

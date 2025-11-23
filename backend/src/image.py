@@ -7,6 +7,7 @@ import osgeo_utils.gdal2tiles
 import gzip
 import tarfile
 import openslide
+import os
 
 def generate_image(filename : str):
     image = pyvips.Image.openslideload(f"{filename}", autocrop = True)
@@ -19,13 +20,24 @@ def generate_image(filename : str):
     except Exception as e:
         return None
     
-def decompress_file(file : UploadFile):
-    with open(f"{file.filename}", "wb") as tarball:
-        tarball.write(file.file.read())
-    with tarfile.open(f"{file.filename}") as tar:
-        tar.extractall()
-        result_filename = [filename for filename in tar.getnames() if filename.endswith(".mrxs")][0]
-    print(result_filename)
+def decompress_file(files : list[UploadFile]):
+    result_filename = ""
+    base_dir = ""
+    sub_dir = ""
+    for file in files:
+        if file.filename is not None and file.filename.endswith(".mrxs"):
+            base_dir = file.filename
+            os.mkdir(base_dir)
+            sub_dir = f"{base_dir}/{file.filename.removesuffix('.mrxs')}"
+            os.mkdir(sub_dir)
+            result_filename = base_dir+"/"+file.filename
+            with open(result_filename, "wb") as new_file:
+                new_file.write(file.file.read())
+                break
+    for file in files:
+        if file.filename is not None and not file.filename.endswith(".mrxs"):
+            with open(sub_dir+"/"+file.filename, "wb") as new_file:
+                new_file.write(file.file.read())
     return result_filename
 
 def generate_thumbnail(filename : str):
