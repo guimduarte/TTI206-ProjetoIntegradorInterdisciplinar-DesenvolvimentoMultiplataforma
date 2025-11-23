@@ -62,11 +62,6 @@ final railDestinations = [
     icon: FluentIcons.search_24_regular,
     selectedIcon: FluentIcons.search_24_regular,
   ),
-  const Destination(
-    label: "Sobre nós",
-    icon: FluentIcons.info_24_regular,
-    selectedIcon: FluentIcons.info_24_filled,
-  ),
 ];
 
 /// Destinos para a área do administrador.
@@ -88,15 +83,13 @@ const contactDestinations = [
     selectedIcon: FluentIcons.globe_24_filled,
   ),
   Destination(
-    label: "E-mail",
-    icon: FluentIcons.mail_24_regular,
-    selectedIcon: FluentIcons.mail_24_filled,
-  ),
-  Destination(
-    label: "Telefone",
+    label: "Fale Conosco",
     icon: FluentIcons.call_24_regular,
     selectedIcon: FluentIcons.call_24_filled,
+
+    route:Routes.contatoPage
   ),
+
 ];
 
 const testeDestinations = [

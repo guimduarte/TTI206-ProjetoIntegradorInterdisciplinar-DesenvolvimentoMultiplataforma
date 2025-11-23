@@ -26,9 +26,8 @@ class _ExibicaoImagensPageState extends State<ExibicaoImagensPage> {
 LayoutBuilder(
   builder: (context, constraints) {
     final double screenHeight = MediaQuery.of(context).size.height;
-
+    // Telas pequenas-----------------------------------------------------
     if (constraints.maxWidth < 600) {
-      // 📱 Telas pequenas: empilha (imagem + texto) e tudo rola junto
       return SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -75,7 +74,7 @@ LayoutBuilder(
         ),
       );
     } else {
-      // 🖥️ Telas grandes: imagem ocupa toda a altura, texto rola independente
+      // Telas grandes-----------------------------------------------------
       return Row(
         crossAxisAlignment: CrossAxisAlignment.stretch, // estica a imagem verticalmente
         children: [
