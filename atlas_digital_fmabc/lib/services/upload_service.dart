@@ -16,13 +16,15 @@ class UploadService {
     final directory = Directory(directoryPath);
     await for (final entity in directory.list(recursive: true)) {
       if (entity is File) {
+        print(entity.path);
         request.files.add(
-          await http.MultipartFile.fromPath(
-            "files",
-            entity.path,
-          ),
+          await http.MultipartFile.fromPath("files", entity.path),
         );
       }
+    }
+    for (var item in request.files) {
+      print(item.field);
+      print(item.filename);
     }
     request.fields["image_name"] = imageName;
     request.fields["image_description"] = imageDescription;

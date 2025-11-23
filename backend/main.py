@@ -46,6 +46,7 @@ async def root():
 
 @app.post("/image", status_code=status.HTTP_201_CREATED)
 async def upload_image(files: list[UploadFile], image_name : str = Form(), image_description : str = Form()):
+    [print(image.filename) for image in files]
     image_directory = decompress_file(files)
     filename = generate_image(image_directory)
     if not filename:
