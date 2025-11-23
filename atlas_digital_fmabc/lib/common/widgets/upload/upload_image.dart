@@ -44,7 +44,7 @@ class _UploadImageState extends State<UploadImage> {
         entries.add(
           TarEntry.data(
             TarHeader(
-              name: pathContext.relative(entity.path, from: directoryPath),
+              name: pathContext.normalize(p.relative(entity.path, from: directoryPath)),
               mode: int.parse('644', radix: 8),
             ),
             File(entity.path).readAsBytesSync(),
