@@ -1,16 +1,29 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 
 class UploadService {
   static const String _baseUrl = 'http://localhost:8000';
 
   Future<Map<String, dynamic>> uploadImage(
-    String tarPath,
+    String directoryPath,
     String imageName,
     String imageDescription,
   ) async {
     final url = Uri.parse('$_baseUrl/image');
     final request = http.MultipartRequest("POST", url);
-    request.files.add(await http.MultipartFile.fromPath("file", tarPath));
+    final directory = Directory(directoryPath);
+    await for (final entity in directory.list(recursive: true)) {
+      if (entity is File) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "files",
+            entity.path,
+          ),
+        );
+      }
+    }
     request.fields["image_name"] = imageName;
     request.fields["image_description"] = imageDescription;
     try {
