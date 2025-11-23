@@ -72,7 +72,7 @@ final railDestinations = [
 /// Destinos para a área do administrador.
 final adminDestinations = [
   Destination(
-    label: "Entrar como Professor",
+    label: "Entrar como Professor ou Admin",
     icon: FluentIcons.arrow_enter_20_regular,
     selectedIcon: FluentIcons.arrow_enter_20_filled,
 
@@ -87,22 +87,24 @@ const contactDestinations = [
     icon: FluentIcons.globe_24_regular,
     selectedIcon: FluentIcons.globe_24_filled,
   ),
-  Destination(
-    label: "E-mail",
-    icon: FluentIcons.mail_24_regular,
-    selectedIcon: FluentIcons.mail_24_filled,
-  ),
-  Destination(
-    label: "Telefone",
-    icon: FluentIcons.call_24_regular,
-    selectedIcon: FluentIcons.call_24_filled,
-  ),
 ];
+//   Destination(
+//     label: "E-mail",
+//     icon: FluentIcons.mail_24_regular,
+//     selectedIcon: FluentIcons.mail_24_filled,
+//   ),
+//   Destination(
+//     label: "Telefone",
+//     icon: FluentIcons.call_24_regular,
+//     selectedIcon: FluentIcons.call_24_filled,
+//   ),
+// ];
 
 const testeDestinations = [
   Destination(
     label: "Teste",
     icon: FluentIcons.alert_24_regular,
     selectedIcon: FluentIcons.alert_24_filled,
-    route: Routes.nestedImagemPage
-)];
+    route: Routes.nestedImagemPage,
+  ),
+];
