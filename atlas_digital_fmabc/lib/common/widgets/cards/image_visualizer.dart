@@ -22,6 +22,16 @@ class ImageVisualizerState extends State<ImageVisualizer> {
   final mapController = MapController();
   bool espelhado = false;
 
+  var customMarkers = <Marker>[];
+  Marker buildPin(LatLng point) => Marker(
+    point: point,
+    width: 60,
+    height: 60,
+    child: GestureDetector(
+      child: const Icon(Icons.arrow_downward, size: 60, color: Colors.black),
+    ),
+  );
+  
   @override
   void initState() {
     super.initState();
@@ -36,6 +46,8 @@ class ImageVisualizerState extends State<ImageVisualizer> {
             mapController: mapController,
             options: MapOptions(
               initialZoom: 1.0,
+              maxZoom: 7,
+              onTap: (_, p) => setState(() => customMarkers = [buildPin(p)]),
               crs: Epsg4326NoRepeat(),
               interactionOptions: InteractionOptions(),
               onMapReady: () {},
@@ -51,9 +63,7 @@ class ImageVisualizerState extends State<ImageVisualizer> {
                 tileDimension: 256,
               ),
               MarkerLayer(
-                markers: [
-                
-                ],
+                markers: customMarkers,
               ),
             ],
           ),
